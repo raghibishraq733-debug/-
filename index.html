@@ -1,1 +1,4932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COMMITTEE // Sector 09</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Hind+Siliguri:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & ATMOSPHERIC PALETTE
+       ========================================================================== */
+    :root {
+      --bg-void: #0f110e;
+      --bg-charcoal: #171a16;
+      --bg-panel: #1f231d;
+      --bg-elevated: #282e25;
+      --forest-dark: #1b281d;
+      --olive-muted: #4b573c;
+      --olive-bright: #73855c;
+      --brown-faded: #483526;
+      --brown-dark: #2d2118;
+      --rust-orange: #c95127;
+      --rust-glow: #e46639;
+      --amber-sulfur: #d4a437;
+      --cream-dirty: #e3ddc8;
+      --cream-muted: #a69f88;
+      --ink-dark: #111310;
+      --border-grime: #343b30;
+      --danger-red: #b82929;
 
+      --font-display: 'Syne', 'Hind Siliguri', 'Impact', sans-serif;
+      --font-body: 'Space Grotesk', 'Hind Siliguri', sans-serif;
+      --font-mono: 'Courier Prime', 'Hind Siliguri', monospace;
+
+      --shadow-hard: 4px 4px 0px #090a08;
+      --shadow-deep: 0 18px 40px rgba(0, 0, 0, 0.65);
+      --radius-sm: 4px;
+      --transition-fast: 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    body.phosphor-mode {
+      --bg-void: #070d08;
+      --bg-charcoal: #0b160d;
+      --bg-panel: #102113;
+      --bg-elevated: #162e1a;
+      --olive-muted: #2d6b38;
+      --olive-bright: #5ce675;
+      --rust-orange: #d9ff43;
+      --rust-glow: #ecff8c;
+      --amber-sulfur: #5ce675;
+      --cream-dirty: #d2f7d6;
+      --cream-muted: #7ab382;
+      --border-grime: #244d2b;
+    }
+
+    body.protocol-nine {
+      filter: hue-rotate(155deg) contrast(1.15);
+    }
+
+    body.roast-mode .speech-bubble {
+      background: #ffd166;
+      color: #140a07;
+      border-color: #c95127;
+      box-shadow: 4px 4px 0 #c95127;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--bg-void);
+      color: var(--cream-dirty);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.45;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9000;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--rust-glow);
+      outline-offset: 3px;
+    }
+
+    button, select {
+      font-family: inherit;
+      cursor: pointer;
+      color: inherit;
+      background: none;
+      border: none;
+      touch-action: manipulation;
+    }
+
+    /* ==========================================================================
+       2. ENTRY GATE
+       ========================================================================== */
+    #entry-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9500;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(201, 81, 39, 0.18), transparent 60%),
+        var(--bg-void);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    #entry-gate.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .gate-box {
+      max-width: 520px;
+      width: 100%;
+      background: var(--bg-charcoal);
+      border: 2px solid var(--border-grime);
+      box-shadow: 8px 8px 0px #060706;
+      padding: 2rem;
+    }
+
+    .gate-stamp {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber-sulfur);
+      border: 1px solid var(--amber-sulfur);
+      padding: 0.2rem 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .gate-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 3.2rem);
+      font-weight: 800;
+      line-height: 0.95;
+      margin-bottom: 0.85rem;
+    }
+
+    .gate-desc {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--cream-muted);
+      margin-bottom: 1.5rem;
+      border-left: 3px solid var(--rust-orange);
+      padding-left: 0.8rem;
+    }
+
+    .gate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .btn-primary {
+      background: var(--rust-orange);
+      color: #100d0a;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1.2rem;
+      border: 2px solid #090a08;
+      box-shadow: var(--shadow-hard);
+      flex: 1 1 auto;
+    }
+
+    .btn-primary:hover {
+      background: var(--rust-glow);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--cream-dirty);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-grime);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--amber-sulfur);
+    }
+
+    /* ==========================================================================
+       3. TOP BAR & AUDIO DECK
+       ========================================================================== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: rgba(18, 20, 17, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--border-grime);
+      padding: 0.65rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+    }
+
+    #brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      user-select: none;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: var(--forest-dark);
+      color: var(--olive-bright);
+      border: 1px solid var(--olive-muted);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .nav-tab {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border-grime);
+      border-radius: var(--radius-sm);
+      color: var(--cream-muted);
+      background: var(--bg-panel);
+    }
+
+    .nav-tab:hover {
+      color: var(--cream-dirty);
+    }
+
+    .nav-tab.active {
+      color: var(--ink-dark);
+      background: var(--cream-dirty);
+      font-weight: 700;
+      border-color: var(--cream-dirty);
+    }
+
+    .audio-deck {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      padding: 0.3rem 0.6rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .audio-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      padding: 0.28rem 0.5rem;
+      border: 1px solid var(--border-grime);
+      border-radius: 3px;
+      background: var(--bg-charcoal);
+    }
+
+    .audio-btn.is-muted,
+    .audio-btn.is-stopped {
+      border-color: var(--danger-red);
+      color: #f08080;
+    }
+
+    .volume-slider {
+      width: 68px;
+      accent-color: var(--rust-orange);
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       4. LAYOUT & SECTIONS
+       ========================================================================== */
+    .app-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1rem 1.2rem 3rem;
+    }
+
+    .view-section {
+      display: none;
+      animation: sectionEnter 0.28s ease;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes sectionEnter {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scene-status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--cream-muted);
+    }
+
+    .live-ticker {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      color: var(--amber-sulfur);
+    }
+
+    .chaos-meter-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      padding: 0.32rem 0.7rem;
+      border-radius: var(--radius-sm);
+      color: var(--cream-dirty);
+    }
+
+    .chaos-meter-bar {
+      width: 90px;
+      height: 8px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-grime);
+      overflow: hidden;
+    }
+
+    .chaos-meter-fill {
+      height: 100%;
+      width: 15%;
+      background: linear-gradient(90deg, var(--amber-sulfur), var(--rust-glow));
+      transition: width 0.25s ease;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rust-orange);
+      box-shadow: 0 0 8px var(--rust-orange);
+      animation: pulseDot 1.6s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.75); }
+    }
+
+    .compound-viewport {
+      position: relative;
+      width: 100%;
+      height: clamp(540px, 70vh, 720px);
+      background: linear-gradient(180deg, #131815 0%, #1c241b 46%, #242319 47%, #171813 100%);
+      border: 2px solid var(--border-grime);
+      box-shadow: var(--shadow-deep);
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      user-select: none;
+    }
+
+    .compound-stage-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .compound-viewport.quake-burst {
+      animation: sceneShake 0.42s ease-in-out 2;
+    }
+
+    @keyframes sceneShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-7px, 4px); }
+      40% { transform: translate(6px, -5px); }
+      60% { transform: translate(-5px, -3px); }
+      80% { transform: translate(5px, 3px); }
+    }
+
+    .brawl-banner {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-160%);
+      z-index: 80;
+      background: var(--rust-orange);
+      color: var(--ink-dark);
+      border: 2px solid #090a08;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.85);
+      padding: 0.55rem 1.3rem;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: transform 0.3s cubic-bezier(0.2, 1.3, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .brawl-banner.active {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .compound-environment {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cloud-drift-1 { animation: driftSlow 55s linear infinite; }
+    .cloud-drift-2 { animation: driftSlow 78s linear infinite reverse; }
+
+    @keyframes driftSlow {
+      from { transform: translateX(-80px); }
+      to { transform: translateX(120px); }
+    }
+
+    .streetlamp-cone { animation: lampFlicker 7s infinite; }
+
+    @keyframes lampFlicker {
+      0%, 92%, 96%, 100% { opacity: 0.42; }
+      93%, 95% { opacity: 0.12; }
+      94% { opacity: 0.55; }
+    }
+
+    .scene-prop {
+      cursor: pointer;
+      transition: filter 0.2s ease;
+    }
+
+    .scene-prop:hover {
+      filter: drop-shadow(0 0 8px rgba(212, 164, 55, 0.65));
+    }
+
+    .scene-prop.prop-triggered {
+      animation: propBounce 0.45s ease;
+    }
+
+    @keyframes propBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      30% { transform: translateY(-8px) rotate(-5deg); }
+      65% { transform: translateY(2px) rotate(4deg); }
+    }
+
+    /* ==========================================================================
+       5. UNHINGED CHARACTER ACTORS, DRAG/YEET & FIGHT / RIOT ANIMATIONS
+       ========================================================================== */
+    .characters-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+    }
+
+    .character-actor {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      width: clamp(104px, 10.5vw, 142px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: grab;
+      transition: left 0.32s cubic-bezier(0.22, 1.35, 0.36, 1), top 0.32s cubic-bezier(0.22, 1.35, 0.36, 1), filter 0.2s ease;
+      touch-action: none;
+    }
+
+    .character-actor.is-dragging {
+      cursor: grabbing;
+      transition: none !important;
+      z-index: 70 !important;
+      filter: drop-shadow(0 12px 18px rgba(228, 102, 57, 0.75));
+    }
+
+    .character-actor.is-dragging .avatar-stage {
+      animation: dragWiggle 0.16s infinite alternate !important;
+    }
+
+    @keyframes dragWiggle {
+      0% { transform: scale(1.16, 0.88) rotate(-14deg); }
+      100% { transform: scale(0.9, 1.18) rotate(14deg); }
+    }
+
+    .character-actor:hover,
+    .character-actor:focus-visible {
+      z-index: 45 !important;
+      filter: drop-shadow(0 6px 14px rgba(228, 102, 57, 0.55));
+    }
+
+    .character-actor.is-highlighted {
+      z-index: 50 !important;
+      filter: drop-shadow(0 0 18px var(--amber-sulfur));
+    }
+
+    .avatar-stage {
+      width: 100%;
+      aspect-ratio: 1 / 1.22;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      transform-origin: bottom center;
+      animation: unhingedRubberIdle 2.1s ease-in-out infinite;
+    }
+
+    @keyframes unhingedRubberIdle {
+      0%, 100% { transform: scale(1, 1) rotate(0deg); }
+      25% { transform: scale(1.09, 0.91) rotate(-4.5deg); }
+      50% { transform: scale(0.92, 1.1) rotate(5deg); }
+      75% { transform: scale(1.06, 0.94) rotate(-3deg); }
+    }
+
+    .avatar-stage img.custom-char-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .avatar-stage svg.char-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .char-shadow {
+      width: 72%;
+      height: 12px;
+      background: rgba(5, 6, 5, 0.58);
+      border-radius: 50%;
+      margin-top: -6px;
+    }
+
+    .char-tag-bar {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(17, 19, 16, 0.92);
+      border: 1px solid var(--border-grime);
+      padding: 2px 6px;
+      border-radius: 3px;
+      box-shadow: 2px 2px 0 #070807;
+    }
+
+    .char-name-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .char-info-btn {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      background: var(--olive-muted);
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    .char-info-btn:hover {
+      background: var(--rust-orange);
+      color: var(--ink-dark);
+    }
+
+    .speech-bubble {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      min-width: 165px;
+      max-width: 245px;
+      width: max-content;
+      background: var(--cream-dirty);
+      color: var(--ink-dark);
+      border: 2px solid #090a08;
+      box-shadow: 4px 4px 0 #090a08;
+      padding: 0.5rem 0.7rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 75;
+      transition: opacity 0.16s ease, transform 0.2s cubic-bezier(0.2, 1.3, 0.3, 1);
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 8px 7px 0 7px;
+      border-style: solid;
+      border-color: #090a08 transparent transparent transparent;
+    }
+
+    .speech-bubble.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .character-actor.edge-left .speech-bubble {
+      left: 0;
+      transform: translateX(0) scale(0.85);
+    }
+    .character-actor.edge-left .speech-bubble.visible { transform: translateX(0) scale(1); }
+    .character-actor.edge-left .speech-bubble::after { left: 26px; }
+
+    .character-actor.edge-right .speech-bubble {
+      left: auto;
+      right: 0;
+      transform: translateX(0) scale(0.85);
+    }
+    .character-actor.edge-right .speech-bubble.visible { transform: translateX(0) scale(1); }
+    .character-actor.edge-right .speech-bubble::after { left: auto; right: 26px; }
+
+    .char-eyelids {
+      transform-origin: center;
+      transform: scaleY(0);
+      transition: transform 0.07s ease;
+    }
+
+    .character-actor.is-blinking .char-eyelids {
+      transform: scaleY(1);
+    }
+
+    .char-torso {
+      transform-origin: 50% 85%;
+      animation: breatheIdle 2.5s ease-in-out infinite;
+    }
+
+    @keyframes breatheIdle {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(1.05) scaleX(0.96); }
+    }
+
+    /* Unhinged Individual Click Reactions */
+    .react-laugh-float .avatar-stage { animation: reactLaughFloat 0.9s cubic-bezier(0.25, 1.6, 0.35, 1); }
+    .react-laugh-float .char-mouth-closed { opacity: 0; }
+    .react-laugh-float .char-mouth-laugh { opacity: 1 !important; animation: jawChatter 0.12s infinite alternate; }
+    @keyframes reactLaughFloat {
+      0% { transform: scale(1, 1) translateY(0) rotate(0deg); }
+      25% { transform: scale(1.36, 0.68) translateY(-18px) rotate(-16deg); }
+      55% { transform: scale(0.74, 1.36) translateY(-24px) rotate(18deg); }
+      80% { transform: scale(1.22, 0.84) translateY(-6px) rotate(-11deg); }
+      100% { transform: scale(1, 1) translateY(0) rotate(0deg); }
+    }
+
+    .react-shady-lean .avatar-stage { animation: reactShadyLean 0.9s cubic-bezier(0.2, 1.5, 0.3, 1); }
+    .react-shady-lean .char-arm-l { transform: rotate(-55deg) translate(6px, -6px); }
+    .react-shady-lean .char-arm-r { transform: rotate(55deg) translate(-6px, -6px); }
+    @keyframes reactShadyLean {
+      0%, 100% { transform: scale(1) skewX(0deg); }
+      35% { transform: scale(1.25, 0.84) skewX(-22deg) translateY(-10px); }
+      70% { transform: scale(0.86, 1.2) skewX(18deg); }
+    }
+
+    .react-barrel-swell .avatar-stage { animation: reactBarrelSwell 0.95s cubic-bezier(0.25, 1.5, 0.35, 1); }
+    .react-barrel-swell .char-mouth-closed { opacity: 0; }
+    .react-barrel-swell .char-mouth-laugh { opacity: 1 !important; animation: jawChatter 0.14s infinite alternate; }
+    @keyframes reactBarrelSwell {
+      0%, 100% { transform: scale(1, 1); }
+      30% { transform: scale(1.54, 0.7) translateY(6px) rotate(-8deg); }
+      65% { transform: scale(1.28, 0.86) rotate(9deg); }
+    }
+
+    .react-lunge .avatar-stage { animation: reactLunge 0.85s cubic-bezier(0.2, 1.5, 0.3, 1); }
+    .react-lunge .char-arm-r { transform: rotate(-95deg) translate(-4px, -10px); }
+    @keyframes reactLunge {
+      0%, 100% { transform: scale(1) translateY(0); }
+      30% { transform: scale(1.35, 0.82) translateY(-18px) rotate(16deg); }
+      65% { transform: scale(0.84, 1.22) translateY(-8px) rotate(-14deg); }
+    }
+
+    .react-tilt .avatar-stage { animation: reactTilt 0.9s cubic-bezier(0.25, 1.5, 0.35, 1); }
+    @keyframes reactTilt {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      30% { transform: rotate(-42deg) scale(1.2, 0.84) translateX(-10px); }
+      65% { transform: rotate(38deg) scale(0.84, 1.22) translateX(10px); }
+    }
+
+    .react-hawker-jump .avatar-stage { animation: reactHawkerJump 0.85s cubic-bezier(0.25, 1.5, 0.35, 1); }
+    .react-hawker-jump .char-arm-l { transform: rotate(-145deg); }
+    .react-hawker-jump .char-mouth-closed { opacity: 0; }
+    .react-hawker-jump .char-mouth-laugh { opacity: 1 !important; }
+    @keyframes reactHawkerJump {
+      0%, 100% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-32px) scale(0.78, 1.36) rotate(-16deg); }
+      65% { transform: translateY(-10px) scale(1.3, 0.76) rotate(16deg); }
+    }
+
+    .react-cackle .avatar-stage { animation: reactCackle 0.9s ease-in-out; }
+    .react-cackle .char-head { transform: rotate(-20deg) translateY(-4px); }
+    .react-cackle .char-mouth-closed { opacity: 0; }
+    .react-cackle .char-mouth-laugh { opacity: 1 !important; animation: jawChatter 0.1s infinite alternate; }
+    @keyframes reactCackle {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      20%, 60% { transform: translateX(-11px) rotate(-11deg) scale(1.18, 0.86); }
+      40%, 80% { transform: translateX(11px) rotate(11deg) scale(0.86, 1.18); }
+    }
+
+    .react-bristle .avatar-stage { animation: reactBristle 0.8s steps(4, end); }
+    .react-bristle .char-arm-l { transform: rotate(-75deg); }
+    .react-bristle .char-arm-r { transform: rotate(75deg); }
+    @keyframes reactBristle {
+      0%, 100% { transform: scale(1) translateY(0) rotate(0deg); }
+      25% { transform: scale(1.34, 0.76) translateY(-18px) rotate(-14deg); }
+      50% { transform: scale(0.8, 1.32) translateY(-9px) rotate(14deg); }
+      75% { transform: scale(1.25, 0.82) translateY(-13px) rotate(-10deg); }
+    }
+
+    .react-wheeze .avatar-stage { animation: reactWheeze 0.9s cubic-bezier(0.25, 1.5, 0.35, 1); }
+    .react-wheeze .char-mouth-closed { opacity: 0; }
+    .react-wheeze .char-mouth-laugh { opacity: 1 !important; animation: jawChatter 0.1s infinite alternate; }
+    @keyframes reactWheeze {
+      0%, 100% { transform: scale(1) skewX(0deg); }
+      25% { transform: scale(1.3, 0.7) skewX(22deg) translateY(6px); }
+      55% { transform: scale(0.78, 1.28) skewX(-22deg) translateY(-12px); }
+    }
+
+    .react-yeet .avatar-stage {
+      animation: reactYeetSpin 0.85s cubic-bezier(0.2, 1.4, 0.3, 1) !important;
+    }
+
+    @keyframes reactYeetSpin {
+      0% { transform: translateY(0) scale(1.2, 0.8) rotate(0deg); }
+      45% { transform: translateY(-48px) scale(0.85, 1.25) rotate(190deg); }
+      100% { transform: translateY(0) scale(1, 1) rotate(360deg); }
+    }
+
+    /* Fight / Brawl / Riot Animations */
+    .is-brawling-attacker .avatar-stage {
+      animation: brawlPunchCycle 0.32s infinite alternate !important;
+    }
+    .is-brawling-attacker .char-arm-r {
+      transform: rotate(-110deg) translateY(-8px);
+    }
+
+    .is-brawling-victim .avatar-stage {
+      animation: brawlHitRecoil 0.28s infinite alternate !important;
+    }
+
+    @keyframes brawlPunchCycle {
+      0% { transform: scale(1.18, 0.86) rotate(-16deg) translateX(-7px); }
+      100% { transform: scale(0.84, 1.25) rotate(20deg) translateX(13px); }
+    }
+
+    @keyframes brawlHitRecoil {
+      0% { transform: scale(1.28, 0.76) rotate(18deg) translateX(9px); }
+      100% { transform: scale(0.8, 1.26) rotate(-18deg) translateX(-9px); }
+    }
+
+    .react-overload .avatar-stage {
+      animation: reactOverload 0.75s cubic-bezier(0.3, 1.4, 0.4, 1);
+    }
+
+    @keyframes reactOverload {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.35) rotate(180deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+
+    @keyframes jawChatter {
+      from { transform: translateY(0); }
+      to { transform: translateY(3px); }
+    }
+
+    .hit-spark {
+      position: absolute;
+      z-index: 85;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--amber-sulfur);
+      text-shadow: 2px 2px 0 #070807;
+      animation: floatPop 0.65s ease-out forwards;
+    }
+
+    @keyframes floatPop {
+      0% { opacity: 1; transform: translate(-50%, 0) scale(0.85); }
+      100% { opacity: 0; transform: translate(-50%, -34px) scale(1.2); }
+    }
+
+    /* ==========================================================================
+       6. CHAOS & FIGHT CONTROL DECK
+       ========================================================================== */
+    .chaos-deck {
+      margin-top: 0.85rem;
+      background: var(--bg-charcoal);
+      border: 2px solid var(--border-grime);
+      padding: 0.8rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      box-shadow: var(--shadow-hard);
+    }
+
+    .chaos-label {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--amber-sulfur);
+    }
+
+    .chaos-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      flex: 1 1 auto;
+      justify-content: flex-end;
+    }
+
+    .chaos-btn {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.54rem 0.82rem;
+      border: 2px solid #090a08;
+      box-shadow: 3px 3px 0 #090a08;
+    }
+
+    .chaos-btn:hover { filter: brightness(1.12); transform: translate(-1px, -1px); }
+    .chaos-btn--chaos { background: var(--rust-orange); color: var(--ink-dark); }
+    .chaos-btn--fight { background: var(--danger-red); color: var(--cream-dirty); }
+    .chaos-btn--riot { background: #9c1c1c; color: var(--amber-sulfur); }
+    .chaos-btn--random { background: var(--amber-sulfur); color: var(--ink-dark); }
+    .chaos-btn--yeet { background: #73855c; color: var(--ink-dark); }
+    .chaos-btn--roast { background: #483526; color: var(--cream-dirty); }
+
+    /* ==========================================================================
+       7. GAMES TAB, EXPANDED MODE, 3-SEC COUNTDOWN & SCORE OVERLAY
+       ========================================================================== */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.15rem;
+    }
+
+    .games-grid.has-expanded-game {
+      grid-template-columns: 1fr;
+    }
+
+    .game-card.is-hidden-by-expand {
+      display: none;
+    }
+
+    .game-card {
+      background: var(--bg-charcoal);
+      border: 2px solid var(--border-grime);
+      box-shadow: var(--shadow-hard);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      scroll-margin-top: 76px;
+    }
+
+    .game-card.is-expanded-game {
+      min-height: calc(100vh - 105px);
+      border-color: var(--amber-sulfur);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
+      padding: 1.25rem;
+    }
+
+    .game-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .game-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--amber-sulfur);
+    }
+
+    .game-card.is-expanded-game h2 {
+      font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .game-exit-expand-btn {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.45rem 0.8rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--amber-sulfur);
+      color: var(--amber-sulfur);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+
+    .game-exit-expand-btn:hover {
+      background: var(--amber-sulfur);
+      color: var(--ink-dark);
+    }
+
+    .game-card.is-expanded-game .game-exit-expand-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .game-desc {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--cream-muted);
+    }
+
+    .game-arena {
+      position: relative;
+      height: 330px;
+      background: #0f130f;
+      border: 2px solid var(--border-grime);
+      overflow: hidden;
+      user-select: none;
+      transition: height 0.2s ease;
+    }
+
+    .game-card.is-expanded-game .game-arena {
+      height: clamp(420px, 58vh, 640px);
+      flex: 1 1 auto;
+    }
+
+    .game-hud {
+      position: relative;
+      z-index: 30;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.42rem 0.65rem;
+      background: rgba(23, 26, 21, 0.94);
+      border-bottom: 1px solid var(--border-grime);
+    }
+
+    /* Big 3-Second Countdown & Big Final Score Overlays */
+    .arena-countdown-overlay {
+      position: absolute;
+      inset: 34px 0 0 0;
+      z-index: 65;
+      background: rgba(11, 14, 10, 0.88);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .arena-countdown-overlay.active {
+      display: flex;
+    }
+
+    .countdown-num {
+      font-family: var(--font-display);
+      font-size: clamp(4.5rem, 16vw, 8.5rem);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--amber-sulfur);
+      text-shadow: 0 6px 24px rgba(212, 164, 55, 0.45);
+    }
+
+    .countdown-sub {
+      font-family: var(--font-mono);
+      font-size: clamp(0.85rem, 2.5vw, 1.15rem);
+      color: var(--cream-dirty);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .arena-score-overlay {
+      position: absolute;
+      inset: 34px 0 0 0;
+      z-index: 60;
+      background: rgba(12, 15, 11, 0.93);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 1.2rem;
+      text-align: center;
+      overflow-y: auto;
+    }
+
+    .arena-score-overlay.active {
+      display: flex;
+    }
+
+    .big-score-value {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 8vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      color: var(--amber-sulfur);
+    }
+
+    .big-rank-msg {
+      font-family: var(--font-body);
+      font-size: clamp(1.6rem, 6vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--rust-glow);
+      background: rgba(25, 29, 22, 0.95);
+      border: 2px solid var(--amber-sulfur);
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+    }
+
+    .big-score-detail {
+      font-family: var(--font-mono);
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: var(--cream-dirty);
+      max-width: 540px;
+    }
+
+    .overlay-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 0.35rem;
+    }
+
+    /* Rui Mach / মৎসলোভি সাইজিদ */
+    .rui-emoji-item {
+      position: absolute;
+      z-index: 15;
+      padding: 0.24rem 0.38rem;
+      border-radius: 7px;
+      font-size: 1.3rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(24, 29, 22, 0.88);
+      border: 1px solid var(--border-grime);
+      box-shadow: 2px 2px 0 #070807;
+    }
+
+    .game-card.is-expanded-game .rui-emoji-item {
+      font-size: 1.65rem;
+      padding: 0.32rem 0.5rem;
+    }
+
+    .rui-thrown-face {
+      position: absolute;
+      z-index: 22;
+      width: 40px;
+      height: 48px;
+      border-radius: 6px;
+      background: #291313;
+      border: 2px solid #ff4747;
+      box-shadow: 0 0 10px rgba(255, 71, 71, 0.65);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 1px;
+      overflow: hidden;
+    }
+
+    .game-card.is-expanded-game .rui-thrown-face {
+      width: 52px;
+      height: 62px;
+    }
+
+    .rui-face-av {
+      width: 32px;
+      height: 34px;
+      pointer-events: none;
+    }
+
+    .game-card.is-expanded-game .rui-face-av {
+      width: 42px;
+      height: 44px;
+    }
+
+    .rui-face-name {
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.54rem;
+      font-weight: 700;
+      line-height: 1.1;
+      background: #ff4747;
+      color: #0b0c0a;
+      padding: 1px 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Rabbit Hole / আলির গুহা */
+    .holes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem;
+      padding: 0.85rem;
+      height: calc(100% - 34px);
+      align-items: center;
+      justify-items: center;
+    }
+
+    .rabbit-hole {
+      position: relative;
+      width: 100%;
+      max-width: 112px;
+      height: 104px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(25, 30, 23, 0.5);
+      border: 1px dashed var(--border-grime);
+    }
+
+    .game-card.is-expanded-game .rabbit-hole {
+      max-width: 170px;
+      height: 150px;
+    }
+
+    .hole-pit {
+      width: 84%;
+      height: 22px;
+      background: #070806;
+      border: 2px solid #3c4632;
+      border-radius: 50%;
+      position: relative;
+      z-index: 4;
+    }
+
+    .hole-mole {
+      position: relative;
+      z-index: 3;
+      width: 68px;
+      height: 74px;
+      transform: translateY(88px);
+      transition: transform 0.08s cubic-bezier(0.2, 1.4, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .game-card.is-expanded-game .hole-mole {
+      width: 94px;
+      height: 102px;
+      transform: translateY(118px);
+    }
+
+    .hole-mole.popped {
+      transform: translateY(10px);
+    }
+
+    .hole-name-badge {
+      position: relative;
+      z-index: 6;
+      margin-top: -12px;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      background: var(--amber-sulfur);
+      color: var(--ink-dark);
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #090a08;
+      white-space: nowrap;
+    }
+
+    .hole-name-badge.decoy {
+      background: var(--rust-orange);
+      color: #100d0a;
+    }
+
+    /* Behind The Barrel / ব্যারেল মাগিকে মারো */
+    .barrel-arena {
+      cursor: crosshair;
+    }
+
+    .barrel-lanes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      padding: 1rem 0.85rem 0.6rem;
+      height: calc(100% - 34px);
+      align-items: end;
+    }
+
+    .barrel-station {
+      position: relative;
+      height: 165px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .game-card.is-expanded-game .barrel-station {
+      height: 245px;
+    }
+
+    .barrel-peeker {
+      position: relative;
+      z-index: 2;
+      width: 72px;
+      height: 84px;
+      transform: translateY(58px);
+      opacity: 0;
+      transition: transform 0.09s ease-out, opacity 0.08s ease;
+      cursor: crosshair;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-card.is-expanded-game .barrel-peeker {
+      width: 98px;
+      height: 112px;
+    }
+
+    .barrel-peeker.exposed {
+      transform: translateY(12px);
+      opacity: 1;
+    }
+
+    .barrel-peeker-tag {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      background: var(--rust-orange);
+      color: #100d0a;
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #090a08;
+      margin-bottom: -4px;
+      z-index: 4;
+    }
+
+    .barrel-peeker-tag.pig-tag {
+      background: #ff758f;
+      color: #14070a;
+    }
+
+    .barrel-pig-emoji {
+      font-size: 2.35rem;
+      line-height: 1;
+      padding-top: 4px;
+    }
+
+    .game-card.is-expanded-game .barrel-pig-emoji {
+      font-size: 3.2rem;
+    }
+
+    .drum-cover {
+      position: relative;
+      z-index: 5;
+      width: 82px;
+      height: 78px;
+      background: repeating-linear-gradient(
+        180deg,
+        #536142 0px,
+        #536142 18px,
+        #2b3322 18px,
+        #2b3322 22px
+      );
+      border: 3px solid #0c0e0b;
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 #070807;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--cream-dirty);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .game-card.is-expanded-game .drum-cover {
+      width: 114px;
+      height: 104px;
+      font-size: 0.76rem;
+    }
+
+    .muzzle-flash {
+      position: absolute;
+      z-index: 40;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff3a1 15%, #e46639 60%, transparent 75%);
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.4);
+      animation: muzzlePop 0.22s ease-out forwards;
+    }
+
+    @keyframes muzzlePop {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+    }
+
+    /* Wheel / অভাগা শুয়োর */
+    .wheel-stage {
+      height: calc(100% - 34px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.6rem;
+      position: relative;
+    }
+
+    .wheel-pointer {
+      width: 0;
+      height: 0;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-top: 18px solid var(--rust-glow);
+      filter: drop-shadow(0 2px 2px #000);
+      z-index: 12;
+      margin-bottom: -10px;
+    }
+
+    .work-wheel {
+      position: relative;
+      width: 196px;
+      height: 196px;
+      border-radius: 50%;
+      border: 4px solid var(--cream-dirty);
+      box-shadow: 0 0 22px rgba(0, 0, 0, 0.85), inset 0 0 14px rgba(0, 0, 0, 0.65);
+      background: conic-gradient(
+        #343d29 0deg 40deg,
+        #483526 40deg 80deg,
+        #252e22 80deg 120deg,
+        #5e2b1b 120deg 160deg,
+        #38422b 160deg 200deg,
+        #4d3b1e 200deg 240deg,
+        #2b3326 240deg 280deg,
+        #4a2820 280deg 320deg,
+        #3c4630 320deg 360deg
+      );
+      transition: transform 2.2s cubic-bezier(0.14, 0.88, 0.22, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-card.is-expanded-game .work-wheel {
+      width: 270px;
+      height: 270px;
+    }
+
+    .wheel-slot-label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: var(--cream-dirty);
+      text-shadow: 1px 1px 0 #090a08;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .wheel-hub {
+      position: relative;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--amber-sulfur);
+      color: var(--ink-dark);
+      border: 2px solid #090a08;
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel-task-line {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--amber-sulfur);
+      text-align: center;
+      max-width: 95%;
+    }
+
+    .game-card.is-expanded-game .wheel-task-line {
+      font-size: 1rem;
+    }
+
+    /* Missing Member / মারা দিতে কে গেছে? */
+    .missing-stage {
+      position: relative;
+      height: calc(100% - 34px);
+      padding: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+      overflow-y: auto;
+    }
+
+    .missing-prompt {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--amber-sulfur);
+      text-align: center;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      padding: 0.35rem 0.55rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .game-card.is-expanded-game .missing-prompt {
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .missing-eight-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+      flex: 1;
+      align-content: center;
+    }
+
+    .missing-member-tile {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      border-radius: var(--radius-sm);
+      padding: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+    }
+
+    .game-card.is-expanded-game .missing-member-tile {
+      padding: 0.55rem;
+    }
+
+    .missing-member-av {
+      width: 38px;
+      height: 44px;
+      pointer-events: none;
+    }
+
+    .game-card.is-expanded-game .missing-member-av {
+      width: 64px;
+      height: 74px;
+    }
+
+    .missing-member-name {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--cream-dirty);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .game-card.is-expanded-game .missing-member-name {
+      font-size: 0.85rem;
+    }
+
+    .missing-choices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+      flex: 1;
+      align-content: center;
+    }
+
+    .missing-choice-btn {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-grime);
+      border-radius: var(--radius-sm);
+      padding: 0.45rem 0.35rem;
+      text-align: center;
+      transition: background 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
+    }
+
+    .game-card.is-expanded-game .missing-choice-btn {
+      font-size: 0.92rem;
+      padding: 0.75rem 0.5rem;
+    }
+
+    .missing-choice-btn:hover:not(:disabled) {
+      border-color: var(--amber-sulfur);
+      background: #333b2e;
+      transform: translateY(-1px);
+    }
+
+    .missing-choice-btn:disabled {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .missing-choice-btn.choice-pass {
+      background: #2b4c2e;
+      border-color: #6ee787;
+      color: #e8ffec;
+    }
+
+    .missing-choice-btn.choice-fail {
+      background: #5c1b1b;
+      border-color: #ff6b6b;
+      color: #ffe5e5;
+    }
+
+    .outcome-box {
+      background: var(--bg-panel);
+      border-left: 3px solid var(--rust-orange);
+      padding: 0.6rem 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      min-height: 44px;
+    }
+
+    /* ==========================================================================
+       8. ROSTER, MEMORY WALL, SOUND ROOM, ABOUT & DOSSIER MODAL
+       ========================================================================== */
+    .section-header {
+      border-bottom: 2px solid var(--border-grime);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+    }
+
+    .roster-grid, .soundboard-grid, .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .roster-card, .sound-pad, .memory-card {
+      background: var(--bg-charcoal);
+      border: 2px solid var(--border-grime);
+      box-shadow: var(--shadow-hard);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .roster-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .roster-avatar {
+      width: 68px;
+      height: 82px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-grime);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .roster-dialogue {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      background: var(--bg-panel);
+      border-left: 3px solid var(--rust-orange);
+      padding: 0.5rem 0.65rem;
+    }
+
+    .roster-actions {
+      display: flex;
+      gap: 0.45rem;
+      margin-top: auto;
+    }
+
+    .roster-actions button {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      padding: 0.48rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-grime);
+    }
+
+    .roster-actions button:hover {
+      background: var(--rust-orange);
+      color: var(--ink-dark);
+      font-weight: 700;
+    }
+
+    .sound-pad { text-align: left; }
+    .sound-pad.is-playing {
+      border-color: var(--rust-glow);
+      background: #2b211a;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-chip {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--border-grime);
+      background: var(--bg-panel);
+      color: var(--cream-muted);
+    }
+
+    .filter-chip.active {
+      background: var(--amber-sulfur);
+      color: var(--ink-dark);
+      font-weight: 700;
+    }
+
+    .memory-media {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: repeating-linear-gradient(45deg, #171a16 0, #171a16 10px, #1f231d 10px, #1f231d 20px);
+      border: 1px solid var(--border-grime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .memory-media img, .memory-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .memory-placeholder {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--cream-muted);
+      border: 1px dashed var(--olive-muted);
+      padding: 0.45rem 0.65rem;
+      background: rgba(15, 17, 14, 0.85);
+    }
+
+    .about-dossier {
+      background: var(--bg-charcoal);
+      border: 2px solid var(--border-grime);
+      box-shadow: var(--shadow-hard);
+      padding: 1.5rem;
+      max-width: 820px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 8000;
+      background: rgba(7, 8, 7, 0.84);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dossier-modal {
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-charcoal);
+      border: 2px solid var(--cream-dirty);
+      box-shadow: 10px 10px 0 #050605;
+      padding: 1.4rem;
+    }
+
+    .dossier-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--border-grime);
+      padding-bottom: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .dossier-close {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-grime);
+      padding: 0.35rem 0.7rem;
+    }
+
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: 165px 1fr;
+      gap: 1.1rem;
+    }
+
+    .stat-row { margin-bottom: 0.45rem; }
+    .stat-row-head {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      margin-bottom: 0.2rem;
+    }
+    .stat-track {
+      height: 8px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-grime);
+    }
+    .stat-fill {
+      height: 100%;
+      background: var(--rust-orange);
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        padding: 0.55rem 0.75rem;
+      }
+      .app-shell {
+        padding: 0.75rem 0.75rem 2.5rem;
+      }
+      .compound-viewport {
+        height: 490px;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .compound-stage-inner {
+        width: 1020px;
+      }
+      .dossier-grid {
+        grid-template-columns: 1fr;
+      }
+      .missing-eight-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .missing-choices-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INITIAL ENTRY GATE -->
+  <div id="entry-gate" role="dialog" aria-modal="true" aria-labelledby="gate-heading">
+    <div class="gate-box">
+      <div class="gate-stamp">SECTOR 09 // UNHINGED EDITION</div>
+      <h1 id="gate-heading" class="gate-title">COMMITTEE</h1>
+      <p class="gate-desc">
+        Expanded game view, relaxing ambient BGM, funny cartoon SFX, 9 drag-and-fling members, street brawls, and 5 arcade games.
+      </p>
+      <div class="gate-actions">
+        <button id="enter-with-sound" class="btn-primary" type="button">Enter With Audio</button>
+        <button id="enter-muted" class="btn-secondary" type="button">Enter Muted</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP NAVIGATION -->
+  <header class="topbar">
+    <div id="brand-title" tabindex="0" role="button" title="COMMITTEE">
+      COMMITTEE <span class="brand-tag">09</span>
+    </div>
+
+    <nav class="nav-tabs" aria-label="Main Sections">
+      <button class="nav-tab active" data-target="scene-view" type="button">Main Scene</button>
+      <button class="nav-tab" data-target="games-view" type="button">Games</button>
+      <button class="nav-tab" data-target="members-view" type="button">Members</button>
+      <button class="nav-tab" data-target="memory-view" type="button">Memory Wall</button>
+      <button class="nav-tab" data-target="sound-view" type="button">Sound Room</button>
+      <button class="nav-tab" data-target="about-view" type="button">About</button>
+    </nav>
+
+    <div class="audio-deck">
+      <button id="toggle-mute-btn" class="audio-btn" type="button">SFX: ON</button>
+      <button id="toggle-music-btn" class="audio-btn" type="button">BGM: ON</button>
+      <input id="volume-control" class="volume-slider" type="range" min="0" max="1" step="0.05" value="0.75" aria-label="Master Volume" />
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <!-- 1. MAIN SCENE -->
+    <section id="scene-view" class="view-section active">
+      <div class="scene-status-bar">
+        <div class="live-ticker">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span id="activity-feed">COMPOUND READY — CLICK OR DRAG &amp; FLING MEMBERS, CLICK PROPS OR MOON</span>
+        </div>
+        <div class="chaos-meter-pill">
+          <span>CHAOS: <strong id="chaos-meter-pct">15%</strong></span>
+          <div class="chaos-meter-bar"><div id="chaos-meter-fill" class="chaos-meter-fill"></div></div>
+        </div>
+      </div>
+
+      <div id="compound-viewport" class="compound-viewport">
+        <div id="brawl-banner" class="brawl-banner" role="alert">COMPOUND BRAWL IN PROGRESS</div>
+
+        <div class="compound-stage-inner" id="compound-stage">
+          <svg class="compound-environment" viewBox="0 0 1400 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0d100e" />
+                <stop offset="55%" stop-color="#1b241c" />
+                <stop offset="100%" stop-color="#2c3324" />
+              </linearGradient>
+              <linearGradient id="lampGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d4a437" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#d4a437" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#25281e" />
+                <stop offset="35%" stop-color="#1b1d16" />
+                <stop offset="100%" stop-color="#10120e" />
+              </linearGradient>
+            </defs>
+
+            <rect width="1400" height="440" fill="url(#skyGrad)" />
+            <g id="prop-moon" class="scene-prop">
+              <circle cx="1140" cy="115" r="46" fill="#d8d0b5" opacity="0.82" />
+              <circle cx="1125" cy="105" r="42" fill="#131914" />
+            </g>
+
+            <g id="prop-clouds-1" class="scene-prop cloud-drift-1" opacity="0.32" fill="#4b573c">
+              <ellipse cx="260" cy="110" rx="130" ry="24" />
+              <ellipse cx="330" cy="122" rx="95" ry="18" />
+            </g>
+            <g id="prop-clouds-2" class="scene-prop cloud-drift-2" opacity="0.26" fill="#5e6850">
+              <ellipse cx="860" cy="90" rx="150" ry="22" />
+              <ellipse cx="940" cy="104" rx="100" ry="16" />
+            </g>
+
+            <rect x="85" y="190" width="54" height="230" fill="#151915" />
+            <path d="M85 190 Q112 162 139 190 Z" fill="#1a201a" />
+            <rect x="1230" y="170" width="12" height="260" fill="#121512" />
+            <line x1="1205" y1="190" x2="1265" y2="190" stroke="#121512" stroke-width="5" />
+            <line x1="1210" y1="212" x2="1260" y2="212" stroke="#121512" stroke-width="4" />
+
+            <path d="M0 155 Q420 225 820 175 T1400 190" fill="none" stroke="#0c0e0c" stroke-width="2.5" />
+            <path d="M0 172 Q450 245 840 192 T1400 212" fill="none" stroke="#0c0e0c" stroke-width="1.8" />
+
+            <g id="hq-building">
+              <rect x="330" y="185" width="520" height="255" fill="#23261f" stroke="#10120f" stroke-width="4" />
+              <polygon points="305,190 875,165 885,195 300,212" fill="#483526" stroke="#10120f" stroke-width="4" />
+              <g id="prop-antenna" class="scene-prop" transform="translate(790, 92)">
+                <line x1="20" y1="76" x2="20" y2="8" stroke="#8d8774" stroke-width="4" />
+                <line x1="4" y1="22" x2="36" y2="14" stroke="#8d8774" stroke-width="3" />
+                <line x1="8" y1="38" x2="32" y2="32" stroke="#8d8774" stroke-width="3" />
+                <circle cx="20" cy="6" r="5" fill="#c95127" />
+              </g>
+
+              <rect x="445" y="218" width="290" height="44" fill="#131512" stroke="#4b573c" stroke-width="2" transform="rotate(-1.2 590 240)" />
+              <text x="590" y="246" text-anchor="middle" fill="#e3ddc8" font-family="monospace" font-weight="bold" font-size="20" letter-spacing="4" transform="rotate(-1.2 590 240)">SECTOR // 09</text>
+
+              <rect x="375" y="280" width="76" height="64" fill="#141813" stroke="#0f110e" stroke-width="3" />
+              <rect x="383" y="288" width="28" height="22" fill="#3a452e" opacity="0.55" />
+              <rect x="725" y="275" width="84" height="64" fill="#141813" stroke="#0f110e" stroke-width="3" />
+              <rect x="765" y="283" width="36" height="48" fill="#5e4722" opacity="0.45" />
+
+              <g id="prop-door" class="scene-prop">
+                <rect x="545" y="295" width="88" height="145" fill="#2d2118" stroke="#0f110e" stroke-width="4" />
+                <circle cx="618" cy="370" r="5" fill="#d4a437" />
+              </g>
+            </g>
+
+            <g fill="#162117">
+              <circle cx="175" cy="355" r="78" />
+              <circle cx="235" cy="380" r="62" />
+              <circle cx="1275" cy="365" r="85" />
+              <circle cx="1210" cy="395" r="58" />
+            </g>
+
+            <rect x="0" y="432" width="1400" height="288" fill="url(#groundGrad)" />
+            <line x1="0" y1="432" x2="1400" y2="432" stroke="#363d30" stroke-width="3" />
+            <path d="M220 520 L310 538 L360 525 M890 560 L980 545 L1060 572 M490 640 L610 628" stroke="#0e100d" stroke-width="3" fill="none" />
+
+            <g id="prop-lamp" class="scene-prop" transform="translate(945, 195)">
+              <polygon class="streetlamp-cone" points="32,38 -85,335 155,335" fill="url(#lampGlow)" />
+              <rect x="26" y="34" width="10" height="260" fill="#151814" />
+              <path d="M12 34 L52 34 L44 20 L20 20 Z" fill="#2b3028" />
+              <ellipse cx="32" cy="38" rx="12" ry="6" fill="#e6be53" />
+            </g>
+
+            <g id="prop-barrel" class="scene-prop" transform="translate(235, 448)">
+              <ellipse cx="34" cy="86" rx="34" ry="9" fill="#090a08" opacity="0.65" />
+              <rect x="6" y="10" width="56" height="76" rx="6" fill="#4d573c" stroke="#10120e" stroke-width="3" />
+              <line x1="6" y1="32" x2="62" y2="32" stroke="#22271c" stroke-width="4" />
+              <line x1="6" y1="62" x2="62" y2="62" stroke="#22271c" stroke-width="4" />
+              <polygon points="34,39 42,53 26,53" fill="#d4a437" />
+            </g>
+
+            <g id="prop-crate" class="scene-prop" transform="translate(1075, 495)">
+              <rect x="0" y="12" width="92" height="54" fill="#483526" stroke="#10120e" stroke-width="3" />
+              <line x1="0" y1="30" x2="92" y2="30" stroke="#261b13" stroke-width="3" />
+              <line x1="0" y1="48" x2="92" y2="48" stroke="#261b13" stroke-width="3" />
+              <path d="M62 12 Q78 -4 94 10 Q78 16 62 12 Z" fill="#8fa199" stroke="#10120e" stroke-width="2" />
+            </g>
+
+            <g id="prop-grass" class="scene-prop" stroke="#34422b" stroke-width="4" fill="none" stroke-linecap="round">
+              <path d="M65 680 Q58 650 45 642 M65 680 Q72 648 84 638" />
+              <path d="M1310 670 Q1300 638 1288 630 M1310 670 Q1322 642 1335 634" />
+            </g>
+          </svg>
+
+          <div id="characters-layer" class="characters-layer"></div>
+        </div>
+      </div>
+
+      <div class="chaos-deck" aria-label="Chaos and Brawl Controls">
+        <div class="chaos-label">SECTOR 09 CONTROLS //</div>
+        <div class="chaos-buttons">
+          <button id="btn-unleash-chaos" class="chaos-btn chaos-btn--chaos" type="button">Unleash Chaos</button>
+          <button id="btn-brawl-pair" class="chaos-btn chaos-btn--fight" type="button">Start Street Fight</button>
+          <button id="btn-full-riot" class="chaos-btn chaos-btn--riot" type="button">9-Person Riot</button>
+          <button id="btn-yeet-all" class="chaos-btn chaos-btn--yeet" type="button">Yeet All</button>
+          <button id="btn-roast-mode" class="chaos-btn chaos-btn--roast" type="button">Roast Mode</button>
+          <button id="btn-random-member" class="chaos-btn chaos-btn--random" type="button">Random Member</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. GAMES TAB -->
+    <section id="games-view" class="view-section" aria-label="Mini Games">
+      <div class="section-header">
+        <h2 class="section-title">GAMES // SECTOR 09 ARCADE</h2>
+        <p class="section-subtitle">Starting any game expands it with a 3-second countdown. Stays expanded &amp; shows your score until you exit expanded view.</p>
+      </div>
+
+      <div id="games-grid" class="games-grid">
+        <!-- GAME 1: মৎসলোভি সাইজিদ (30 SECOND TIMER) -->
+        <article id="game-card-rui" class="game-card">
+          <div class="game-card-head">
+            <h2>মৎসলোভি সাইজিদ (30s)</h2>
+            <button class="game-exit-expand-btn" type="button" data-exit-expand>Exit Expanded View</button>
+          </div>
+          <p class="game-desc">
+            <strong>30s</strong> timer! Catch fish for points, dodge 🐷/🌿/🛢️/🐘, and NEVER touch a member face (instant Game Over).
+          </p>
+          <div id="rui-arena" class="game-arena">
+            <div class="game-hud">
+              <span>SCORE: <strong id="rui-score">0</strong></span>
+              <span>TIME LEFT: <strong id="rui-time">30000 ms</strong></span>
+              <span id="rui-status">READY</span>
+            </div>
+            <div id="rui-countdown" class="arena-countdown-overlay" aria-live="polite">
+              <div id="rui-countdown-num" class="countdown-num">3</div>
+              <div class="countdown-sub">মৎসলোভি সাইজিদ STARTING...</div>
+            </div>
+            <div id="rui-score-overlay" class="arena-score-overlay">
+              <div id="rui-big-score" class="big-score-value">0 PTS</div>
+              <div id="rui-big-rank" class="big-rank-msg">তুই শুয়োরছানা</div>
+              <div id="rui-big-detail" class="big-score-detail"></div>
+              <div class="overlay-actions-row">
+                <button id="rui-replay-btn" class="btn-primary" type="button">Play Again</button>
+                <button class="btn-secondary" type="button" data-exit-expand>Exit Expanded View</button>
+              </div>
+            </div>
+          </div>
+          <div id="rui-outcome" class="outcome-box">30s round. Score tiers: আপনি ব্রাহ্মণ, তুমি ক্ষত্রিয়, তুমি শুদ্র, তুই শুয়োরছানা.</div>
+          <button id="rui-start-btn" class="btn-primary" type="button">Start মৎসলোভি সাইজিদ (30s)</button>
+        </article>
+
+        <!-- GAME 2: আলির গুহা (20 SECOND TIMER) -->
+        <article id="game-card-hole" class="game-card">
+          <div class="game-card-head">
+            <h2>আলির গুহা (20s)</h2>
+            <button class="game-exit-expand-btn" type="button" data-exit-expand>Exit Expanded View</button>
+          </div>
+          <p class="game-desc">
+            <strong>20s</strong> timer! Hit popping members for points; red DECOY fakes cost points!
+          </p>
+          <div id="hole-arena" class="game-arena">
+            <div class="game-hud">
+              <span>SCORE: <strong id="hole-kills">0</strong></span>
+              <span>TIME LEFT: <strong id="hole-time">20000 ms</strong></span>
+              <span id="hole-status">READY</span>
+            </div>
+            <div id="holes-grid" class="holes-grid"></div>
+            <div id="hole-countdown" class="arena-countdown-overlay" aria-live="polite">
+              <div id="hole-countdown-num" class="countdown-num">3</div>
+              <div class="countdown-sub">আলির গুহা STARTING...</div>
+            </div>
+            <div id="hole-score-overlay" class="arena-score-overlay">
+              <div id="hole-big-score" class="big-score-value">0 PTS</div>
+              <div id="hole-big-rank" class="big-rank-msg">তুই শুয়োরছানা</div>
+              <div id="hole-big-detail" class="big-score-detail"></div>
+              <div class="overlay-actions-row">
+                <button id="hole-replay-btn" class="btn-primary" type="button">Play Again</button>
+                <button class="btn-secondary" type="button" data-exit-expand>Exit Expanded View</button>
+              </div>
+            </div>
+          </div>
+          <div id="hole-outcome" class="outcome-box">20s round. Score tiers: আপনি ব্রাহ্মণ, তুমি ক্ষত্রিয়, তুমি শুদ্র, তুই শুয়োরছানা.</div>
+          <button id="hole-start-btn" class="btn-primary" type="button">Start আলির গুহা (20s)</button>
+        </article>
+
+        <!-- GAME 3: ব্যারেল মাগিকে মারো (20 SECOND TIMER) -->
+        <article id="game-card-barrel" class="game-card">
+          <div class="game-card-head">
+            <h2>ব্যারেল মাগিকে মারো (20s)</h2>
+            <button class="game-exit-expand-btn" type="button" data-exit-expand>Exit Expanded View</button>
+          </div>
+          <p class="game-desc">
+            <strong>20s</strong> timer! Shoot peeking targets for points. DO NOT shoot peeking Pigs (🐷 -20 pts).
+          </p>
+          <div id="barrel-arena" class="game-arena barrel-arena">
+            <div class="game-hud">
+              <span>HITS: <strong id="barrel-hits">0</strong></span>
+              <span>SCORE: <strong id="barrel-score">0</strong></span>
+              <span>TIME LEFT: <strong id="barrel-time">20000 ms</strong></span>
+            </div>
+            <div id="barrel-lanes" class="barrel-lanes"></div>
+            <div id="barrel-countdown" class="arena-countdown-overlay" aria-live="polite">
+              <div id="barrel-countdown-num" class="countdown-num">3</div>
+              <div class="countdown-sub">ব্যারেল মাগিকে মারো STARTING...</div>
+            </div>
+            <div id="barrel-score-overlay" class="arena-score-overlay">
+              <div id="barrel-big-score" class="big-score-value">0 PTS</div>
+              <div id="barrel-big-rank" class="big-rank-msg">তুই শুয়োরছানা</div>
+              <div id="barrel-big-detail" class="big-score-detail"></div>
+              <div class="overlay-actions-row">
+                <button id="barrel-replay-btn" class="btn-primary" type="button">Play Again</button>
+                <button class="btn-secondary" type="button" data-exit-expand>Exit Expanded View</button>
+              </div>
+            </div>
+          </div>
+          <div id="barrel-outcome" class="outcome-box">20s round. Score tiers: আপনি ব্রাহ্মণ, তুমি ক্ষত্রিয়, তুমি শুদ্র, তুই শুয়োরছানা.</div>
+          <button id="barrel-start-btn" class="btn-primary" type="button">Start ব্যারেল মাগিকে মারো (20s)</button>
+        </article>
+
+        <!-- GAME 4: অভাগা শুয়োর (SPINNING WHEEL) -->
+        <article id="game-card-wheel" class="game-card">
+          <div class="game-card-head">
+            <h2>অভাগা শুয়োর</h2>
+            <button class="game-exit-expand-btn" type="button" data-exit-expand>Exit Expanded View</button>
+          </div>
+          <p class="game-desc">
+            Spin the 9-member wheel. Members shuffle &amp; spin before landing on who gets stuck with the chore.
+          </p>
+          <div id="wheel-arena" class="game-arena">
+            <div class="game-hud">
+              <span>SPINS: <strong id="wheel-spins">0</strong></span>
+              <span>ASSIGNEE: <strong id="wheel-assignee">---</strong></span>
+              <span id="wheel-status">IDLE</span>
+            </div>
+            <div class="wheel-stage">
+              <div class="wheel-pointer" aria-hidden="true"></div>
+              <div id="work-wheel" class="work-wheel">
+                <div class="wheel-hub">WORK</div>
+              </div>
+              <div id="wheel-task" class="wheel-task-line">Awaiting wheel spin...</div>
+            </div>
+            <div id="wheel-countdown" class="arena-countdown-overlay" aria-live="polite">
+              <div id="wheel-countdown-num" class="countdown-num">3</div>
+              <div class="countdown-sub">অভাগা শুয়োর STARTING...</div>
+            </div>
+          </div>
+          <div id="wheel-outcome" class="outcome-box">Hit spin to shuffle the 9 members and pick today's unlucky worker.</div>
+          <button id="wheel-spin-btn" class="btn-primary" type="button">Start &amp; Spin অভাগা শুয়োর</button>
+        </article>
+
+        <!-- GAME 5: মারা দিতে কে গেছে? (MISSING MEMBER MEMORY GAME) -->
+        <article id="game-card-missing" class="game-card">
+          <div class="game-card-head">
+            <h2>মারা দিতে কে গেছে?</h2>
+            <button class="game-exit-expand-btn" type="button" data-exit-expand>Exit Expanded View</button>
+          </div>
+          <p class="game-desc">
+            8 of the 9 members appear for 3000 ms (3 seconds), then vanish. Pick who was missing from all 9 names!
+          </p>
+          <div id="missing-arena" class="game-arena">
+            <div class="game-hud">
+              <span>ROUND: <strong id="missing-round">0</strong></span>
+              <span>SCORE: <strong id="missing-score">0</strong></span>
+              <span id="missing-phase">READY</span>
+            </div>
+            <div id="missing-stage" class="missing-stage">
+              <div id="missing-prompt" class="missing-prompt">Press Start to inspect 8 members for 3 seconds.</div>
+              <div id="missing-grid" class="missing-eight-grid"></div>
+            </div>
+            <div id="missing-countdown" class="arena-countdown-overlay" aria-live="polite">
+              <div id="missing-countdown-num" class="countdown-num">3</div>
+              <div class="countdown-sub">মারা দিতে কে গেছে? STARTING...</div>
+            </div>
+          </div>
+          <div id="missing-outcome" class="outcome-box">Watch closely for 3000 ms, then pick the missing member.</div>
+          <button id="missing-start-btn" class="btn-primary" type="button">Start মারা দিতে কে গেছে?</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. MEMBERS ROSTER -->
+    <section id="members-view" class="view-section" aria-label="All Nine Members">
+      <div class="section-header">
+        <h2 class="section-title">THE NINE MEMBERS</h2>
+        <p class="section-subtitle">Click to hear signature lines, open dossiers, or start a street fight with a member.</p>
+      </div>
+      <div id="roster-grid" class="roster-grid"></div>
+    </section>
+
+    <!-- 4. MEMORY WALL -->
+    <section id="memory-view" class="view-section" aria-label="Memory Wall">
+      <div class="section-header">
+        <h2 class="section-title">MEMORY WALL</h2>
+        <p class="section-subtitle">Edit COMMITTEE_CONFIG.memories in the script to plug in real photos and videos.</p>
+      </div>
+      <div id="memory-filters" class="filter-bar"></div>
+      <div id="memory-grid" class="memory-grid"></div>
+    </section>
+
+    <!-- 5. SOUND ROOM -->
+    <section id="sound-view" class="view-section" aria-label="Sound Room">
+      <div class="section-header">
+        <h2 class="section-title">SOUND ROOM</h2>
+        <p class="section-subtitle">9-channel audio board + funny comedy &amp; chaos FX triggers.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+        <button id="sfx-airhorn-btn" class="btn-primary" type="button">Airhorn Blast</button>
+        <button id="sfx-boing-btn" class="btn-secondary" type="button">Funny Boing</button>
+        <button id="sfx-bonk-btn" class="btn-secondary" type="button">Cartoon Bonk</button>
+        <button id="sfx-wahwah-btn" class="btn-secondary" type="button">Sad Wah-Wah</button>
+        <button id="sfx-riot-btn" class="btn-secondary" type="button">Riot Siren</button>
+      </div>
+      <div id="soundboard-grid" class="soundboard-grid"></div>
+    </section>
+
+    <!-- 6. ABOUT -->
+    <section id="about-view" class="view-section" aria-label="About Committee">
+      <div class="section-header">
+        <h2 class="section-title">ABOUT // COMMITTEE</h2>
+        <p class="section-subtitle">Editable universe file.</p>
+      </div>
+      <div id="about-content" class="about-dossier"></div>
+    </section>
+  </main>
+
+  <!-- DOSSIER MODAL -->
+  <div id="dossier-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="dossier-name">
+    <div class="dossier-modal">
+      <div class="dossier-top">
+        <div>
+          <div id="dossier-code" style="font-family:var(--font-mono);font-size:0.74rem;color:var(--amber-sulfur);">FILE // 00</div>
+          <h2 id="dossier-name" class="section-title">MEMBER NAME</h2>
+        </div>
+        <button id="dossier-close-btn" class="dossier-close" type="button">ESC / CLOSE</button>
+      </div>
+      <div class="dossier-grid">
+        <div style="display:flex;flex-direction:column;gap:0.65rem;">
+          <div id="dossier-avatar-slot" style="width:140px;height:165px;background:var(--bg-panel);border:1px solid var(--border-grime);padding:6px;"></div>
+          <button id="dossier-sound-btn" class="btn-primary" type="button">Play Audio</button>
+          <button id="dossier-fight-btn" class="btn-secondary" type="button">Pick For Brawl</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div id="dossier-dialogue" style="background:var(--bg-panel);border-left:3px solid var(--rust-orange);padding:0.55rem 0.75rem;font-family:var(--font-mono);font-weight:700;"></div>
+          <div><strong>Nickname:</strong> <span id="dossier-nickname"></span></div>
+          <div><strong>Description:</strong> <span id="dossier-desc"></span></div>
+          <div><strong>Personality:</strong> <span id="dossier-personality"></span></div>
+          <div><strong>Special Ability:</strong> <span id="dossier-ability"></span></div>
+          <div id="dossier-stats"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       CENTRALIZED CONFIGURATION
+       ========================================================================== */
+    const COMMITTEE_CONFIG = {
+      settings: {
+        defaultVolume: 0.75,
+        autonomousIntervalMs: 14000,
+        dialogueDurationMs: 4200
+      },
+
+      about: {
+        paragraphs: [
+          "COMMITTEE is a closed-circuit digital compound built for nine specific people and nobody else.",
+          "[EDITABLE PLACEHOLDER] Replace this text in COMMITTEE_CONFIG.about with your own dry summary of this group."
+        ],
+        placeholderNotice: "ASSET & TEXT GUIDE: Drop transparent PNGs into assets/characters/<id>.png and MP3s into assets/sounds/<id>.mp3. Edit profiles, stats, and memories in COMMITTEE_CONFIG."
+      },
+
+      members: [
+        {
+          id: "ragib",
+          name: "Ragib",
+          dialogue: "I love Mamuni",
+          roast: "Mamuni still hasn't checked Ragib's status updates.",
+          imagePath: "assets/characters/ragib.png",
+          soundPath: "assets/sounds/ragib.mp3",
+          position: { x: 16, y: 82 },
+          zIndex: 24,
+          clickAnim: "react-laugh-float",
+          synthType: "boing",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Ragib's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Unfazed, locked onto a single fixation.",
+          ability: "[EDITABLE PLACEHOLDER] Immune to distraction once Mamuni is mentioned.",
+          stats: [
+            { label: "[EDITABLE] Focus Lock", value: 99 },
+            { label: "[EDITABLE] Situational Awareness", value: 18 },
+            { label: "[EDITABLE] Brawl Chaos", value: 76 }
+          ]
+        },
+        {
+          id: "ali",
+          name: "Ali",
+          dialogue: "kanta thake poshchim para, amar shobhab dalali kora",
+          roast: "Ali tried to broker a deal on a broken bicycle wheel.",
+          imagePath: "assets/characters/ali.png",
+          soundPath: "assets/sounds/ali.mp3",
+          position: { x: 28, y: 76 },
+          zIndex: 22,
+          clickAnim: "react-shady-lean",
+          synthType: "slideWhistle",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Ali's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Always negotiating an angle nobody asked for.",
+          ability: "[EDITABLE PLACEHOLDER] Brokers unnecessary deals in record time.",
+          stats: [
+            { label: "[EDITABLE] Dalali Instinct", value: 96 },
+            { label: "[EDITABLE] Eye Contact Stability", value: 24 },
+            { label: "[EDITABLE] Brawl Chaos", value: 85 }
+          ]
+        },
+        {
+          id: "bipu",
+          name: "Bipu",
+          dialogue: "Ganja khamu, barrel homu",
+          roast: "Bipu has the aerodynamic profile of a dropped oil drum.",
+          imagePath: "assets/characters/bipu.png",
+          soundPath: "assets/sounds/bipu.mp3",
+          position: { x: 38, y: 89 },
+          zIndex: 28,
+          clickAnim: "react-barrel-swell",
+          synthType: "bonk",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Bipu's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Heavy gravity, zero urgency, barrel-shaped ambition.",
+          ability: "[EDITABLE PLACEHOLDER] Expands volume to occupy any available seating.",
+          stats: [
+            { label: "[EDITABLE] Barrel Density", value: 98 },
+            { label: "[EDITABLE] Rush Factor", value: 5 },
+            { label: "[EDITABLE] Brawl Chaos", value: 92 }
+          ]
+        },
+        {
+          id: "nafi",
+          name: "Nafi",
+          dialogue: "Prem korsu tuk biye korai lagbi boxod.",
+          roast: "Nafi writes marriage subpoenas before anyone even says hello.",
+          imagePath: "assets/characters/nafi.png",
+          soundPath: "assets/sounds/nafi.mp3",
+          position: { x: 48, y: 78 },
+          zIndex: 23,
+          clickAnim: "react-lunge",
+          synthType: "sproing",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Nafi's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Self-appointed magistrate of everyone else's bad choices.",
+          ability: "[EDITABLE PLACEHOLDER] Instant unsolicited marriage sentencing.",
+          stats: [
+            { label: "[EDITABLE] Verdict Speed", value: 94 },
+            { label: "[EDITABLE] Mercy", value: 7 },
+            { label: "[EDITABLE] Brawl Chaos", value: 89 }
+          ]
+        },
+        {
+          id: "vaste",
+          name: "Vaste",
+          dialogue: "16 inchi hol, prem korai vul.",
+          roast: "Vaste brings a tape measure to emotional breakdowns.",
+          imagePath: "assets/characters/vaste.png",
+          soundPath: "assets/sounds/vaste.mp3",
+          position: { x: 58, y: 91 },
+          zIndex: 29,
+          clickAnim: "react-tilt",
+          synthType: "squeak",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Vaste's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Cold arithmetic, zero romance, severe posture.",
+          ability: "[EDITABLE PLACEHOLDER] Reduces any emotional crisis to raw measurements.",
+          stats: [
+            { label: "[EDITABLE] Cold Logic", value: 95 },
+            { label: "[EDITABLE] Romance Tolerance", value: 2 },
+            { label: "[EDITABLE] Brawl Chaos", value: 80 }
+          ]
+        },
+        {
+          id: "sayzid",
+          name: "Sayzid",
+          dialogue: "Dada rui mach hobe rui mach?",
+          roast: "Sayzid yells about rui mach even inside a library.",
+          imagePath: "assets/characters/sayzid.png",
+          soundPath: "assets/sounds/sayzid.mp3",
+          position: { x: 68, y: 77 },
+          zIndex: 22,
+          clickAnim: "react-hawker-jump",
+          synthType: "pop",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Sayzid's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Treats every quiet room like a wet-market auction.",
+          ability: "[EDITABLE PLACEHOLDER] Materializes rui mach inquiries out of thin air.",
+          stats: [
+            { label: "[EDITABLE] Fish Pitch", value: 97 },
+            { label: "[EDITABLE] Indoor Voice", value: 12 },
+            { label: "[EDITABLE] Brawl Chaos", value: 88 }
+          ]
+        },
+        {
+          id: "jahid",
+          name: "Jahid",
+          dialogue: "kire! Hatir hol hoya gesu tui?",
+          roast: "Jahid's commentary has zero brakes and zero filters.",
+          imagePath: "assets/characters/jahid.png",
+          soundPath: "assets/sounds/jahid.mp3",
+          position: { x: 78, y: 88 },
+          zIndex: 27,
+          clickAnim: "react-cackle",
+          synthType: "boing",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Jahid's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Observational menace with zero filter.",
+          ability: "[EDITABLE PLACEHOLDER] Spots structural mutations from fifty paces.",
+          stats: [
+            { label: "[EDITABLE] Roasting Accuracy", value: 93 },
+            { label: "[EDITABLE] Filter", value: 4 },
+            { label: "[EDITABLE] Brawl Chaos", value: 91 }
+          ]
+        },
+        {
+          id: "billal",
+          name: "Billal",
+          dialogue: "kire shuworer bacchara.",
+          roast: "Billal wakes up already mad at Sector 09.",
+          imagePath: "assets/characters/billal.png",
+          soundPath: "assets/sounds/billal.mp3",
+          position: { x: 87, y: 79 },
+          zIndex: 24,
+          clickAnim: "react-bristle",
+          synthType: "bonk",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Billal's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] Perpetually unimpressed by the other eight.",
+          ability: "[EDITABLE PLACEHOLDER] Instant room-wide hostility greeting.",
+          stats: [
+            { label: "[EDITABLE] Hostility Greeting", value: 99 },
+            { label: "[EDITABLE] Patience", value: 9 },
+            { label: "[EDITABLE] Brawl Chaos", value: 97 }
+          ]
+        },
+        {
+          id: "anam",
+          name: "Anam",
+          dialogue: "eeeee vaiii. Ekdom kochi mal re.",
+          roast: "Anam's high-pitched wheeze can shatter cheap glassware.",
+          imagePath: "assets/characters/anam.png",
+          soundPath: "assets/sounds/anam.mp3",
+          position: { x: 93, y: 92 },
+          zIndex: 30,
+          clickAnim: "react-wheeze",
+          synthType: "squeak",
+          nickname: "[EDITABLE PLACEHOLDER] Nickname",
+          description: "[EDITABLE PLACEHOLDER] Add Anam's short dossier note here.",
+          personality: "[EDITABLE PLACEHOLDER] High-pitched chaos commentary from the corner.",
+          ability: "[EDITABLE PLACEHOLDER] Ultrasonic wheeze-laugh that destabilizes meetings.",
+          stats: [
+            { label: "[EDITABLE] Pitch Frequency", value: 98 },
+            { label: "[EDITABLE] Restraint", value: 6 },
+            { label: "[EDITABLE] Brawl Chaos", value: 90 }
+          ]
+        }
+      ],
+
+      memories: [
+        {
+          id: "mem-01",
+          title: "[EDITABLE PLACEHOLDER] Archive Entry 01",
+          date: "[EDITABLE DATE]",
+          category: "INCIDENTS",
+          mediaType: "placeholder",
+          mediaPath: "assets/memories/sample1.jpg",
+          caption: "[EDITABLE PLACEHOLDER] Add real photo/video path in COMMITTEE_CONFIG.memories."
+        },
+        {
+          id: "mem-02",
+          title: "[EDITABLE PLACEHOLDER] Archive Entry 02",
+          date: "[EDITABLE DATE]",
+          category: "GATHERINGS",
+          mediaType: "placeholder",
+          mediaPath: "assets/memories/sample2.jpg",
+          caption: "[EDITABLE PLACEHOLDER] Replace with your actual group photo and date."
+        },
+        {
+          id: "mem-03",
+          title: "[EDITABLE PLACEHOLDER] Archive Entry 03",
+          date: "[EDITABLE DATE]",
+          category: "EVIDENCE",
+          mediaType: "placeholder",
+          mediaPath: "assets/memories/sample3.mp4",
+          caption: "[EDITABLE PLACEHOLDER] Supports .jpg, .png, .webp, or .mp4 files."
+        }
+      ]
+    };
+
+    /* ==========================================================================
+       4-TIER SCORE RANKING FOR মৎসলোভি সাইজিদ, ব্যারেল মাগিকে মারো & আলির গুহা
+       ========================================================================== */
+    function getScoreTierMessage(score, thresholds = { brahmin: 150, kshatriya: 80, shudra: 35 }) {
+      if (score >= thresholds.brahmin) return "আপনি ব্রাহ্মণ";
+      if (score >= thresholds.kshatriya) return "তুমি ক্ষত্রিয়";
+      if (score >= thresholds.shudra) return "তুমি শুদ্র";
+      return "তুই শুয়োরছানা";
+    }
+
+    /* ==========================================================================
+       SVG AVATAR RIGS FOR ALL 9 MEMBERS
+       ========================================================================== */
+    function buildCharacterSVG(memberId) {
+      const rigs = {
+        ragib: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M36 96 Q70 84 104 96 L112 162 L28 162 Z" fill="#4b573c" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M54 96 L70 116 L86 96" fill="none" stroke="#1b2217" stroke-width="3"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:36px 102px">
+              <path d="M36 100 Q20 126 32 150" fill="none" stroke="#4b573c" stroke-width="13" stroke-linecap="round"/>
+              <path d="M36 100 Q20 126 32 150" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:104px 102px">
+              <path d="M104 100 Q120 126 108 150" fill="none" stroke="#4b573c" stroke-width="13" stroke-linecap="round"/>
+              <path d="M104 100 Q120 126 108 150" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <rect x="44" y="34" width="52" height="58" rx="22" fill="#cfa684" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M40 52 Q42 20 72 22 Q102 22 100 52 Q92 38 78 42 Q64 34 50 43 Z" fill="#171614" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <ellipse cx="58" cy="58" rx="6.5" ry="5.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <ellipse cx="82" cy="58" rx="6.5" ry="5.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="58" cy="59" r="2.6" fill="#0d0f0c"/>
+                <circle cx="82" cy="59" r="2.6" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <rect x="50" y="51" width="16" height="14" rx="4" fill="#cfa684" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="74" y="51" width="16" height="14" rx="4" fill="#cfa684" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M60 76 Q71 82 81 74" fill="none" stroke="#0d0f0c" stroke-width="2.8" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M58 72 Q70 72 82 72 Q80 87 70 87 Q60 87 58 72 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.2"/>
+            </g>
+          </svg>`,
+
+        ali: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M38 94 L70 88 L102 94 L108 162 L32 162 Z" fill="#c95127" stroke="#0d0f0c" stroke-width="3"/>
+              <polygon points="52,90 70,114 88,90 82,82 58,82" fill="#1e221c" stroke="#0d0f0c" stroke-width="2.5"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:38px 100px">
+              <path d="M38 100 L28 134 L54 138" fill="none" stroke="#c95127" stroke-width="12" stroke-linecap="round"/>
+              <path d="M38 100 L28 134 L54 138" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:102px 100px">
+              <path d="M102 100 L112 134 L86 138" fill="none" stroke="#c95127" stroke-width="12" stroke-linecap="round"/>
+              <path d="M102 100 L112 134 L86 138" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <polygon points="46,34 94,34 90,82 70,92 50,82" fill="#c49773" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M44 44 L48 22 L92 26 L96 44 L76 34 Z" fill="#141413" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <rect x="52" y="52" width="13" height="8" rx="2" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <rect x="75" y="52" width="13" height="8" rx="2" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="59" cy="56" r="2.5" fill="#0d0f0c"/>
+                <circle cx="82" cy="56" r="2.5" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <rect x="50" y="50" width="16" height="12" fill="#c49773" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="74" y="50" width="16" height="12" fill="#c49773" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M56 76 L84 74" stroke="#0d0f0c" stroke-width="2.6" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M56 73 L84 73 L80 84 L60 84 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2"/>
+            </g>
+          </svg>`,
+
+        bipu: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <ellipse cx="70" cy="128" rx="48" ry="38" fill="#2d3827" stroke="#0d0f0c" stroke-width="3.5"/>
+              <path d="M25 118 Q70 126 115 118" fill="none" stroke="#171d14" stroke-width="3"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:26px 112px">
+              <path d="M26 112 Q10 132 22 152" fill="none" stroke="#2d3827" stroke-width="14" stroke-linecap="round"/>
+              <path d="M26 112 Q10 132 22 152" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:114px 112px">
+              <path d="M114 112 Q130 132 118 152" fill="none" stroke="#2d3827" stroke-width="14" stroke-linecap="round"/>
+              <path d="M114 112 Q130 132 118 152" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <circle cx="70" cy="64" r="30" fill="#be916e" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M40 56 Q42 26 70 26 Q98 26 100 56 Z" fill="#483526" stroke="#0d0f0c" stroke-width="3"/>
+              <g class="char-eyes">
+                <circle cx="58" cy="65" r="6" fill="#e6dcc8" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="82" cy="65" r="6" fill="#e6dcc8" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="58" cy="66" r="2.5" fill="#0d0f0c"/>
+                <circle cx="82" cy="66" r="2.5" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <circle cx="58" cy="65" r="6.5" fill="#be916e" stroke="#0d0f0c" stroke-width="2"/>
+                  <circle cx="82" cy="65" r="6.5" fill="#be916e" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M61 81 Q70 78 79 81" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+              <ellipse class="char-mouth-laugh" opacity="0" cx="70" cy="82" rx="11" ry="8" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.5"/>
+            </g>
+          </svg>`,
+
+        nafi: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M40 94 L100 94 L106 162 L34 162 Z" fill="#232620" stroke="#0d0f0c" stroke-width="3"/>
+              <polygon points="62,94 70,118 78,94" fill="#e3ddc8" stroke="#0d0f0c" stroke-width="2"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:40px 100px">
+              <path d="M40 100 L26 138" fill="none" stroke="#232620" stroke-width="12" stroke-linecap="round"/>
+              <path d="M40 100 L26 138" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:100px 100px">
+              <path d="M100 100 L118 128" fill="none" stroke="#232620" stroke-width="12" stroke-linecap="round"/>
+              <path d="M100 100 L118 128" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <rect x="46" y="32" width="48" height="58" rx="16" fill="#cca07c" stroke="#0d0f0c" stroke-width="3"/>
+              <polygon points="44,44 48,22 58,32 68,18 78,31 90,20 96,44" fill="#141413" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <circle cx="58" cy="56" r="6" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="82" cy="56" r="6" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="58" cy="56" r="2.7" fill="#0d0f0c"/>
+                <circle cx="82" cy="56" r="2.7" fill="#0d0f0c"/>
+                <path d="M50 46 L65 52 M90 46 L75 52" stroke="#0d0f0c" stroke-width="3.2" stroke-linecap="round"/>
+                <g class="char-eyelids">
+                  <rect x="50" y="49" width="16" height="14" fill="#cca07c" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="74" y="49" width="16" height="14" fill="#cca07c" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M58 77 Q70 71 82 77" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M57 73 L83 73 L79 85 L61 85 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.2"/>
+            </g>
+          </svg>`,
+
+        vaste: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <rect x="44" y="92" width="52" height="70" rx="6" fill="#3a452e" stroke="#0d0f0c" stroke-width="3"/>
+              <line x1="44" y1="112" x2="96" y2="112" stroke="#d4a437" stroke-width="4"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:44px 98px">
+              <path d="M44 98 L34 150" fill="none" stroke="#3a452e" stroke-width="11" stroke-linecap="round"/>
+              <path d="M44 98 L34 150" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:96px 98px">
+              <path d="M96 98 L106 150" fill="none" stroke="#3a452e" stroke-width="11" stroke-linecap="round"/>
+              <path d="M96 98 L106 150" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <rect x="48" y="26" width="44" height="64" rx="18" fill="#c79b78" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M46 44 Q46 20 70 20 Q94 20 94 44 L46 44 Z" fill="#181715" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <circle cx="59" cy="56" r="6.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="81" cy="56" r="6.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="59" cy="56" r="2" fill="#0d0f0c"/>
+                <circle cx="81" cy="56" r="2" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <rect x="51" y="49" width="16" height="14" fill="#c79b78" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="73" y="49" width="16" height="14" fill="#c79b78" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <line class="char-mouth-closed" x1="59" y1="77" x2="81" y2="77" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+              <rect class="char-mouth-laugh" opacity="0" x="60" y="73" width="20" height="9" rx="2" fill="#2b1212" stroke="#0d0f0c" stroke-width="2"/>
+            </g>
+          </svg>`,
+
+        sayzid: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M38 94 L102 94 L106 162 L34 162 Z" fill="#d8d1bc" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M38 94 L56 94 L56 162 L34 162 Z" fill="#483526" stroke="#0d0f0c" stroke-width="2.5"/>
+              <path d="M84 94 L102 94 L106 162 L84 162 Z" fill="#483526" stroke="#0d0f0c" stroke-width="2.5"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:38px 100px">
+              <path d="M38 100 L18 118" fill="none" stroke="#d8d1bc" stroke-width="11" stroke-linecap="round"/>
+              <path d="M38 100 L18 118" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:102px 100px">
+              <path d="M102 100 L118 134" fill="none" stroke="#d8d1bc" stroke-width="11" stroke-linecap="round"/>
+              <path d="M102 100 L118 134" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <circle cx="70" cy="60" r="27" fill="#cfa37e" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M42 52 Q40 24 70 24 Q100 24 98 52 Q88 38 70 40 Q52 38 42 52 Z" fill="#171614" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <circle cx="59" cy="58" r="7" fill="#f7f4ea" stroke="#0d0f0c" stroke-width="2.2"/>
+                <circle cx="81" cy="58" r="7" fill="#f7f4ea" stroke="#0d0f0c" stroke-width="2.2"/>
+                <circle cx="60" cy="58" r="2.8" fill="#0d0f0c"/>
+                <circle cx="82" cy="58" r="2.8" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <circle cx="59" cy="58" r="7.5" fill="#cfa37e" stroke="#0d0f0c" stroke-width="2"/>
+                  <circle cx="81" cy="58" r="7.5" fill="#cfa37e" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M58 74 Q70 83 82 74" fill="none" stroke="#0d0f0c" stroke-width="2.8" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M56 71 Q70 71 84 71 Q82 86 70 86 Q58 86 56 71 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.2"/>
+            </g>
+          </svg>`,
+
+        jahid: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M32 94 L108 94 L112 162 L28 162 Z" fill="#4f543b" stroke="#0d0f0c" stroke-width="3.2"/>
+              <path d="M54 94 L70 124 L86 94" fill="#1b1e18" stroke="#0d0f0c" stroke-width="2.5"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:34px 102px">
+              <path d="M34 102 L58 128" fill="none" stroke="#4f543b" stroke-width="13" stroke-linecap="round"/>
+              <path d="M34 102 L58 128" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:106px 102px">
+              <path d="M106 102 L82 128" fill="none" stroke="#4f543b" stroke-width="13" stroke-linecap="round"/>
+              <path d="M106 102 L82 128" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <rect x="44" y="30" width="52" height="60" rx="20" fill="#c59774" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M42 48 Q44 20 74 20 Q98 22 98 46 Q82 32 56 36 Z" fill="#151412" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <ellipse cx="58" cy="56" rx="6.5" ry="5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <ellipse cx="82" cy="56" rx="6.5" ry="5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="58" cy="56" r="2.6" fill="#0d0f0c"/>
+                <circle cx="82" cy="56" r="2.6" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <rect x="50" y="50" width="16" height="12" fill="#c59774" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="74" y="50" width="16" height="12" fill="#c59774" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M55 74 Q70 84 85 72" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M53 70 Q70 72 87 69 Q84 88 70 88 Q56 88 53 70 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.4"/>
+            </g>
+          </svg>`,
+
+        billal: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M34 94 L106 94 L110 162 L30 162 Z" fill="#1e211d" stroke="#0d0f0c" stroke-width="3.2"/>
+              <line x1="36" y1="106" x2="104" y2="106" stroke="#c95127" stroke-width="4"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:34px 100px">
+              <path d="M34 100 L22 142" fill="none" stroke="#1e211d" stroke-width="13" stroke-linecap="round"/>
+              <path d="M34 100 L22 142" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:106px 100px">
+              <path d="M106 100 L118 142" fill="none" stroke="#1e211d" stroke-width="13" stroke-linecap="round"/>
+              <path d="M106 100 L118 142" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <rect x="44" y="34" width="52" height="56" rx="12" fill="#c2936f" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M44 44 Q44 26 70 26 Q96 26 96 44 L92 38 L48 38 Z" fill="#141413" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <circle cx="58" cy="57" r="5.8" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="82" cy="57" r="5.8" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="57" cy="57" r="2.6" fill="#0d0f0c"/>
+                <circle cx="81" cy="57" r="2.6" fill="#0d0f0c"/>
+                <path d="M49 48 L66 53 M91 48 L74 53" stroke="#0d0f0c" stroke-width="3.5" stroke-linecap="round"/>
+                <g class="char-eyelids">
+                  <rect x="50" y="50" width="16" height="14" fill="#c2936f" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="74" y="50" width="16" height="14" fill="#c2936f" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M56 79 L65 75 L75 78 L84 74" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M55 73 L85 73 L82 86 L58 86 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.4"/>
+            </g>
+          </svg>`,
+
+        anam: `
+          <svg class="char-svg" viewBox="0 0 140 175" aria-hidden="true">
+            <g class="char-torso">
+              <path d="M38 96 L102 96 L108 162 L32 162 Z" fill="#b88c28" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M56 96 Q70 108 84 96" fill="none" stroke="#0d0f0c" stroke-width="2.5"/>
+            </g>
+            <g class="char-arm-l" style="transform-origin:38px 102px">
+              <path d="M38 102 L24 136" fill="none" stroke="#b88c28" stroke-width="11" stroke-linecap="round"/>
+              <path d="M38 102 L24 136" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-arm-r" style="transform-origin:102px 102px">
+              <path d="M102 102 L116 136" fill="none" stroke="#b88c28" stroke-width="11" stroke-linecap="round"/>
+              <path d="M102 102 L116 136" fill="none" stroke="#0d0f0c" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="char-head">
+              <ellipse cx="70" cy="60" rx="25" ry="29" fill="#d1a682" stroke="#0d0f0c" stroke-width="3"/>
+              <path d="M44 50 Q46 22 72 22 Q96 24 96 50 L84 38 L70 44 L56 37 Z" fill="#171614" stroke="#0d0f0c" stroke-width="2.5"/>
+              <g class="char-eyes">
+                <ellipse cx="59" cy="57" rx="6" ry="5.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <ellipse cx="81" cy="57" rx="6" ry="5.5" fill="#f2eee2" stroke="#0d0f0c" stroke-width="2"/>
+                <circle cx="60" cy="57" r="2.5" fill="#0d0f0c"/>
+                <circle cx="82" cy="57" r="2.5" fill="#0d0f0c"/>
+                <g class="char-eyelids">
+                  <rect x="51" y="50" width="16" height="14" fill="#d1a682" stroke="#0d0f0c" stroke-width="2"/>
+                  <rect x="73" y="50" width="16" height="14" fill="#d1a682" stroke="#0d0f0c" stroke-width="2"/>
+                </g>
+              </g>
+              <path class="char-mouth-closed" d="M58 75 Q70 84 82 73" fill="none" stroke="#0d0f0c" stroke-width="2.8" stroke-linecap="round"/>
+              <path class="char-mouth-laugh" opacity="0" d="M56 71 Q70 74 84 70 Q80 87 70 87 Q60 87 56 71 Z" fill="#2b1212" stroke="#0d0f0c" stroke-width="2.2"/>
+            </g>
+          </svg>`
+      };
+      return rigs[memberId] || rigs.ragib;
+    }
+
+    /* ==========================================================================
+       AUDIO MANAGER (RELAXING AMBIENT BGM + FUNNY CARTOON SFX)
+       ========================================================================== */
+    class CommitteeAudioManager {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.isMuted = false;
+        this.musicEnabled = true;
+        this.volume = COMMITTEE_CONFIG.settings.defaultVolume;
+        this.activeSfxAudio = null;
+        this.bgmInterval = null;
+        this.bgmStep = 0;
+        this.unlocked = false;
+      }
+
+      unlock(startWithSound = true) {
+        this.isMuted = !startWithSound;
+        this.musicEnabled = startWithSound;
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) {
+            this.ctx = new AudioCtx();
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.value = this.isMuted ? 0 : this.volume;
+            this.masterGain.connect(this.ctx.destination);
+          }
+        }
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+        this.unlocked = true;
+        this.updateControlsUI();
+        if (this.musicEnabled && !this.isMuted) this.startMusic();
+      }
+
+      setVolume(val) {
+        this.volume = Math.max(0, Math.min(1, parseFloat(val)));
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : this.volume, this.ctx.currentTime, 0.03);
+        }
+        if (this.activeSfxAudio) this.activeSfxAudio.volume = this.isMuted ? 0 : this.volume;
+      }
+
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.setVolume(this.volume);
+        if (this.isMuted) {
+          this.stopAllSfx();
+          this.stopMusic();
+        } else if (this.musicEnabled) {
+          this.startMusic();
+        }
+        this.updateControlsUI();
+      }
+
+      toggleMusic() {
+        this.musicEnabled = !this.musicEnabled;
+        if (this.musicEnabled && !this.isMuted) this.startMusic();
+        else this.stopMusic();
+        this.updateControlsUI();
+      }
+
+      updateControlsUI() {
+        const muteBtn = document.getElementById("toggle-mute-btn");
+        const musicBtn = document.getElementById("toggle-music-btn");
+        if (muteBtn) {
+          muteBtn.textContent = this.isMuted ? "SFX: MUTED" : "SFX: ON";
+          muteBtn.classList.toggle("is-muted", this.isMuted);
+        }
+        if (musicBtn) {
+          musicBtn.textContent = this.musicEnabled ? "BGM: ON" : "BGM: OFF";
+          musicBtn.classList.toggle("is-stopped", !this.musicEnabled);
+        }
+      }
+
+      startMusic() {
+        if (!this.ctx || this.isMuted || !this.musicEnabled) return;
+        if (this.ctx.state === "suspended") this.ctx.resume();
+        if (this.bgmInterval) return;
+
+        // Calm, relaxing electric-piano / ambient arp (Cmaj7 -> Am7 -> Fmaj7 -> G6)
+        const chords = [
+          [261.63, 329.63, 392.00, 493.88],
+          [220.00, 261.63, 329.63, 392.00],
+          [174.61, 220.00, 261.63, 349.23],
+          [196.00, 246.94, 293.66, 392.00]
+        ];
+        const bassRoots = [130.81, 110.00, 87.31, 98.00];
+
+        this.bgmInterval = setInterval(() => {
+          if (!this.ctx || this.isMuted || !this.musicEnabled || document.hidden) return;
+          const now = this.ctx.currentTime;
+          const bar = Math.floor(this.bgmStep / 8) % chords.length;
+          const beat = this.bgmStep % 8;
+          const chord = chords[bar];
+
+          // Gentle warm pad on beat 0
+          if (beat === 0) {
+            const rootOsc = this.ctx.createOscillator();
+            const rootGain = this.ctx.createGain();
+            rootOsc.type = "sine";
+            rootOsc.frequency.setValueAtTime(bassRoots[bar], now);
+            rootGain.gain.setValueAtTime(0.001, now);
+            rootGain.gain.linearRampToValueAtTime(0.065, now + 0.25);
+            rootGain.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+            rootOsc.connect(rootGain);
+            rootGain.connect(this.masterGain);
+            rootOsc.start(now);
+            rootOsc.stop(now + 2.55);
+          }
+
+          // Soft plucked note on even beats
+          if (beat % 2 === 0) {
+            const noteFreq = chord[(beat / 2) % chord.length];
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(noteFreq, now);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.042, now + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.72);
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.75);
+          }
+
+          this.bgmStep += 1;
+        }, 320);
+      }
+
+      stopMusic() {
+        clearInterval(this.bgmInterval);
+        this.bgmInterval = null;
+      }
+
+      stopAllSfx() {
+        if (this.activeSfxAudio) {
+          try { this.activeSfxAudio.pause(); this.activeSfxAudio.currentTime = 0; } catch (_) {}
+          this.activeSfxAudio = null;
+        }
+      }
+
+      playMemberSound(member, onEnded) {
+        if (this.isMuted) {
+          if (onEnded) setTimeout(onEnded, 450);
+          return;
+        }
+        if (!this.unlocked) this.unlock(true);
+        this.stopAllSfx();
+
+        const audio = new Audio(member.soundPath);
+        audio.volume = this.volume;
+        this.activeSfxAudio = audio;
+
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          if (this.activeSfxAudio === audio) this.activeSfxAudio = null;
+          if (onEnded) onEnded();
+        };
+
+        audio.addEventListener("ended", finish, { once: true });
+        audio.addEventListener("error", () => {
+          this.activeSfxAudio = null;
+          this.playFunnySfx(member.synthType);
+          setTimeout(finish, 450);
+        }, { once: true });
+
+        audio.play().catch(() => {
+          this.activeSfxAudio = null;
+          this.playFunnySfx(member.synthType);
+          setTimeout(finish, 450);
+        });
+      }
+
+      playFunnySfx(type = "boing") {
+        if (!this.ctx || this.isMuted) return;
+        if (this.ctx.state === "suspended") this.ctx.resume();
+        const now = this.ctx.currentTime;
+
+        if (type === "boing") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.11);
+          osc.frequency.exponentialRampToValueAtTime(210, now + 0.22);
+          osc.frequency.exponentialRampToValueAtTime(440, now + 0.34);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.37);
+          return;
+        }
+
+        if (type === "bonk") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(310, now);
+          osc.frequency.exponentialRampToValueAtTime(68, now + 0.14);
+          gain.gain.setValueAtTime(0.28, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.16);
+          return;
+        }
+
+        if (type === "squeak") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(780, now);
+          osc.frequency.exponentialRampToValueAtTime(1320, now + 0.09);
+          osc.frequency.exponentialRampToValueAtTime(640, now + 0.18);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.2);
+          return;
+        }
+
+        if (type === "slideWhistle") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(1180, now + 0.24);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.38);
+          gain.gain.setValueAtTime(0.17, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.39);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.4);
+          return;
+        }
+
+        if (type === "sproing") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(190, now);
+          osc.frequency.exponentialRampToValueAtTime(690, now + 0.2);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.23);
+          return;
+        }
+
+        if (type === "pop") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.exponentialRampToValueAtTime(760, now + 0.07);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.09);
+          return;
+        }
+
+        if (type === "wahWah") {
+          const notes = [311.13, 293.66, 277.18, 261.63];
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sawtooth";
+            const t0 = now + idx * 0.13;
+            osc.frequency.setValueAtTime(freq, t0);
+            osc.frequency.linearRampToValueAtTime(freq * 0.92, t0 + 0.12);
+            gain.gain.setValueAtTime(0.11, t0);
+            gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.125);
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(t0);
+            osc.stop(t0 + 0.13);
+          });
+          return;
+        }
+
+        if (type === "airhorn") {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(587.33, now);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now);
+          osc.stop(now + 0.5);
+          return;
+        }
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.1);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      }
+    }
+
+    const audioManager = new CommitteeAudioManager();
+
+    /* ==========================================================================
+       EXPANDED VIEW & 3-SECOND COUNTDOWN CONTROLLER (BUG-FREE)
+       ========================================================================== */
+    const countdownTimers = {};
+
+    function expandGameCard(cardId) {
+      const grid = document.getElementById("games-grid");
+      const targetCard = document.getElementById(cardId);
+      if (!grid || !targetCard) return;
+
+      grid.classList.add("has-expanded-game");
+      document.querySelectorAll(".game-card").forEach((card) => {
+        if (card === targetCard) {
+          card.classList.remove("is-hidden-by-expand");
+          card.classList.add("is-expanded-game");
+        } else {
+          card.classList.add("is-hidden-by-expand");
+          card.classList.remove("is-expanded-game");
+        }
+      });
+
+      // Keep expanded card comfortably in view without jumping to top of document
+      requestAnimationFrame(() => {
+        const rect = targetCard.getBoundingClientRect();
+        const topbarHeight = 68;
+        if (rect.top < topbarHeight || rect.top > window.innerHeight * 0.45) {
+          const targetY = window.scrollY + rect.top - topbarHeight - 8;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+        }
+      });
+    }
+
+    function collapseExpandedGame() {
+      const grid = document.getElementById("games-grid");
+      if (grid) grid.classList.remove("has-expanded-game");
+      document.querySelectorAll(".game-card").forEach((card) => {
+        card.classList.remove("is-hidden-by-expand", "is-expanded-game");
+      });
+    }
+
+    function runThreeSecondCountdown(key, overlayId, numId, onComplete) {
+      if (countdownTimers[key]) {
+        clearInterval(countdownTimers[key]);
+        countdownTimers[key] = null;
+      }
+
+      const overlay = document.getElementById(overlayId);
+      const numEl = document.getElementById(numId);
+      if (!overlay || !numEl) {
+        onComplete();
+        return;
+      }
+
+      let count = 3;
+      numEl.textContent = String(count);
+      overlay.classList.add("active");
+      audioManager.playFunnySfx("pop");
+
+      countdownTimers[key] = setInterval(() => {
+        count -= 1;
+        if (count > 0) {
+          numEl.textContent = String(count);
+          audioManager.playFunnySfx("pop");
+        } else {
+          clearInterval(countdownTimers[key]);
+          countdownTimers[key] = null;
+          overlay.classList.remove("active");
+          audioManager.playFunnySfx("sproing");
+          onComplete();
+        }
+      }, 1000);
+    }
+
+    function cancelCountdown(key, overlayId) {
+      if (countdownTimers[key]) {
+        clearInterval(countdownTimers[key]);
+        countdownTimers[key] = null;
+      }
+      const overlay = document.getElementById(overlayId);
+      if (overlay) overlay.classList.remove("active");
+    }
+
+    /* ==========================================================================
+       APP STATE & SCENE INTERACTIONS
+       ========================================================================== */
+    const state = {
+      clickStreak: { id: null, count: 0, lastTime: 0 },
+      cooldowns: {},
+      dialogueTimers: {},
+      titleClicks: 0,
+      secretBuffer: "",
+      activeModalMember: null,
+      memoryCategory: "ALL",
+      brawlTimer: null,
+      chaosMeter: 15,
+      roastMode: false
+    };
+
+    function bumpChaos(delta) {
+      state.chaosMeter = Math.max(0, Math.min(100, state.chaosMeter + delta));
+      const pct = document.getElementById("chaos-meter-pct");
+      const fill = document.getElementById("chaos-meter-fill");
+      if (pct) pct.textContent = `${state.chaosMeter}%`;
+      if (fill) fill.style.width = `${state.chaosMeter}%`;
+    }
+
+    function spawnHitSpark(container, xPx, yPx, text) {
+      if (!container) return;
+      const spark = document.createElement("div");
+      spark.className = "hit-spark";
+      spark.style.left = `${xPx}px`;
+      spark.style.top = `${yPx}px`;
+      spark.textContent = text;
+      container.appendChild(spark);
+      setTimeout(() => spark.remove(), 650);
+    }
+
+    function logActivity(text) {
+      const el = document.getElementById("activity-feed");
+      if (el) el.textContent = text;
+    }
+
+    function createAvatarVisual(member) {
+      const wrap = document.createElement("div");
+      wrap.style.width = "100%";
+      wrap.style.height = "100%";
+      wrap.innerHTML = buildCharacterSVG(member.id);
+
+      const img = new Image();
+      img.src = member.imagePath;
+      img.alt = member.name;
+      img.className = "custom-char-img";
+      img.onload = () => {
+        wrap.innerHTML = "";
+        wrap.appendChild(img);
+      };
+      return wrap;
+    }
+
+    function getMemberLine(member) {
+      return state.roastMode && member.roast ? member.roast : member.dialogue;
+    }
+
+    function attachDragAndFling(actor, member, layer) {
+      let dragging = false;
+      let moved = false;
+      let startX = 0;
+      let startY = 0;
+      let lastX = 0;
+      let lastY = 0;
+      let vx = 0;
+      let vy = 0;
+
+      actor.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".char-info-btn")) return;
+        e.preventDefault();
+        dragging = true;
+        moved = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        vx = 0;
+        vy = 0;
+        actor.setPointerCapture(e.pointerId);
+        actor.classList.add("is-dragging");
+      });
+
+      actor.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const dxTotal = Math.abs(e.clientX - startX);
+        const dyTotal = Math.abs(e.clientY - startY);
+        if (dxTotal > 6 || dyTotal > 6) moved = true;
+
+        vx = e.clientX - lastX;
+        vy = e.clientY - lastY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        const rect = layer.getBoundingClientRect();
+        const xPct = Math.max(8, Math.min(94, ((e.clientX - rect.left) / rect.width) * 100));
+        const yPct = Math.max(54, Math.min(95, ((e.clientY - rect.top) / rect.height) * 100));
+        actor.style.left = `${xPct}%`;
+        actor.style.top = `${yPct}%`;
+      });
+
+      const releasePointer = () => {
+        if (!dragging) return;
+        dragging = false;
+        actor.classList.remove("is-dragging");
+
+        if (!moved) {
+          bumpChaos(6);
+          triggerCharacter(member.id);
+          return;
+        }
+
+        bumpChaos(10);
+        const rect = layer.getBoundingClientRect();
+        const curLeft = parseFloat(actor.style.left) || member.position.x;
+        const curTop = parseFloat(actor.style.top) || member.position.y;
+        const flingX = Math.max(8, Math.min(94, curLeft + (vx / Math.max(1, rect.width)) * 260));
+        const flingY = Math.max(56, Math.min(95, curTop + (vy / Math.max(1, rect.height)) * 220));
+
+        actor.style.left = `${flingX}%`;
+        actor.style.top = `${flingY}%`;
+        actor.classList.remove("react-yeet");
+        void actor.offsetWidth;
+        actor.classList.add("react-yeet");
+        audioManager.playFunnySfx("slideWhistle");
+        spawnHitSpark(layer, rect.width * (flingX / 100), rect.height * ((flingY - 10) / 100), "FLUNG!");
+        logActivity(`FLUNG ${member.name.toUpperCase()} across Sector 09!`);
+
+        setTimeout(() => {
+          actor.classList.remove("react-yeet");
+        }, 860);
+      };
+
+      actor.addEventListener("pointerup", releasePointer);
+      actor.addEventListener("pointercancel", releasePointer);
+    }
+
+    function renderMainScene() {
+      const layer = document.getElementById("characters-layer");
+      layer.innerHTML = "";
+
+      COMMITTEE_CONFIG.members.forEach((member) => {
+        const actor = document.createElement("div");
+        actor.className = "character-actor";
+        actor.id = `actor-${member.id}`;
+        actor.style.left = `${member.position.x}%`;
+        actor.style.top = `${member.position.y}%`;
+        actor.style.zIndex = member.zIndex;
+        actor.setAttribute("role", "button");
+        actor.setAttribute("tabindex", "0");
+        actor.setAttribute("aria-label", `${member.name}: ${member.dialogue}`);
+
+        if (member.position.x <= 20) actor.classList.add("edge-left");
+        if (member.position.x >= 82) actor.classList.add("edge-right");
+
+        const bubble = document.createElement("div");
+        bubble.className = "speech-bubble";
+        bubble.id = `bubble-${member.id}`;
+        bubble.textContent = getMemberLine(member);
+
+        const stage = document.createElement("div");
+        stage.className = "avatar-stage";
+        stage.appendChild(createAvatarVisual(member));
+
+        const shadow = document.createElement("div");
+        shadow.className = "char-shadow";
+
+        const tagBar = document.createElement("div");
+        tagBar.className = "char-tag-bar";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "char-name-label";
+        nameSpan.textContent = member.name;
+
+        const infoBtn = document.createElement("button");
+        infoBtn.type = "button";
+        infoBtn.className = "char-info-btn";
+        infoBtn.textContent = "ID";
+        infoBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openDossier(member.id);
+        });
+
+        tagBar.appendChild(nameSpan);
+        tagBar.appendChild(infoBtn);
+
+        actor.appendChild(bubble);
+        actor.appendChild(stage);
+        actor.appendChild(shadow);
+        actor.appendChild(tagBar);
+
+        attachDragAndFling(actor, member, layer);
+
+        actor.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            bumpChaos(6);
+            triggerCharacter(member.id);
+          }
+        });
+
+        layer.appendChild(actor);
+      });
+    }
+
+    function triggerCharacter(memberId, options = {}) {
+      const member = COMMITTEE_CONFIG.members.find((m) => m.id === memberId);
+      const actor = document.getElementById(`actor-${memberId}`);
+      const bubble = document.getElementById(`bubble-${memberId}`);
+      if (!member || !actor || !bubble) return;
+
+      const now = Date.now();
+      if (!options.bypassCooldown && state.cooldowns[memberId] && now - state.cooldowns[memberId] < 320) return;
+      state.cooldowns[memberId] = now;
+
+      if (state.clickStreak.id === memberId && now - state.clickStreak.lastTime < 1400) {
+        state.clickStreak.count += 1;
+      } else {
+        state.clickStreak = { id: memberId, count: 1, lastTime: now };
+      }
+      const overload = state.clickStreak.count >= 4;
+      if (overload) state.clickStreak.count = 0;
+
+      if (!options.keepOtherBubbles) {
+        document.querySelectorAll(".speech-bubble.visible").forEach((b) => {
+          if (b !== bubble) b.classList.remove("visible");
+        });
+      }
+
+      actor.classList.remove(member.clickAnim, "react-overload", "react-yeet");
+      void actor.offsetWidth;
+      actor.classList.add(overload ? "react-overload" : member.clickAnim);
+
+      clearTimeout(actor._animTimer);
+      actor._animTimer = setTimeout(() => {
+        actor.classList.remove(member.clickAnim, "react-overload");
+      }, 920);
+
+      const line = getMemberLine(member);
+      bubble.textContent = line;
+      bubble.classList.add("visible");
+
+      clearTimeout(state.dialogueTimers[memberId]);
+      state.dialogueTimers[memberId] = setTimeout(() => {
+        bubble.classList.remove("visible");
+      }, COMMITTEE_CONFIG.settings.dialogueDurationMs);
+
+      if (!options.silent) audioManager.playMemberSound(member);
+      if (!options.quietLog) logActivity(`${member.name.toUpperCase()}: "${line}"`);
+    }
+
+    function startCharacterFight(forcedIdA = null, forcedIdB = null) {
+      const members = COMMITTEE_CONFIG.members;
+      let mA = members.find((m) => m.id === forcedIdA) || members[Math.floor(Math.random() * members.length)];
+      let mB = members.find((m) => m.id === forcedIdB && m.id !== mA.id);
+      if (!mB) {
+        const others = members.filter((m) => m.id !== mA.id);
+        mB = others[Math.floor(Math.random() * others.length)];
+      }
+
+      const actorA = document.getElementById(`actor-${mA.id}`);
+      const actorB = document.getElementById(`actor-${mB.id}`);
+      const banner = document.getElementById("brawl-banner");
+      const layer = document.getElementById("characters-layer");
+      if (!actorA || !actorB) return;
+
+      switchTab("scene-view");
+      bumpChaos(18);
+
+      clearInterval(state.brawlTimer);
+      document.querySelectorAll(".character-actor").forEach((el) => {
+        el.classList.remove("is-brawling-attacker", "is-brawling-victim");
+      });
+
+      const centerX = 44 + Math.random() * 12;
+      const centerY = 83 + Math.random() * 7;
+      actorA.style.left = `${centerX - 4}%`;
+      actorA.style.top = `${centerY}%`;
+      actorB.style.left = `${centerX + 4}%`;
+      actorB.style.top = `${centerY}%`;
+
+      if (banner) {
+        banner.textContent = `FIGHT // ${mA.name.toUpperCase()} VS ${mB.name.toUpperCase()}`;
+        banner.classList.add("active");
+      }
+      logActivity(`STREET FIGHT: ${mA.name} vs ${mB.name}!`);
+
+      triggerCharacter(mA.id, { keepOtherBubbles: true, bypassCooldown: true, quietLog: true });
+      setTimeout(() => {
+        triggerCharacter(mB.id, { keepOtherBubbles: true, bypassCooldown: true, quietLog: true });
+      }, 280);
+
+      let ticks = 0;
+      state.brawlTimer = setInterval(() => {
+        ticks += 1;
+        const aAttacks = ticks % 2 === 1;
+        actorA.classList.toggle("is-brawling-attacker", aAttacks);
+        actorA.classList.toggle("is-brawling-victim", !aAttacks);
+        actorB.classList.toggle("is-brawling-attacker", !aAttacks);
+        actorB.classList.toggle("is-brawling-victim", aAttacks);
+
+        actorA.style.left = `${centerX - (aAttacks ? 1 : 6)}%`;
+        actorB.style.left = `${centerX + (aAttacks ? 6 : 1)}%`;
+        audioManager.playFunnySfx(aAttacks ? "bonk" : "sproing");
+
+        const rect = layer.getBoundingClientRect();
+        spawnHitSpark(layer, rect.width * (centerX / 100), rect.height * ((centerY - 12) / 100), aAttacks ? "WHAM!" : "BONK!");
+
+        if (ticks >= 8) {
+          clearInterval(state.brawlTimer);
+          actorA.classList.remove("is-brawling-attacker", "is-brawling-victim");
+          actorB.classList.remove("is-brawling-attacker", "is-brawling-victim");
+          actorA.style.left = `${mA.position.x}%`;
+          actorA.style.top = `${mA.position.y}%`;
+          actorB.style.left = `${mB.position.x}%`;
+          actorB.style.top = `${mB.position.y}%`;
+          if (banner) banner.classList.remove("active");
+          logActivity(`${mA.name} vs ${mB.name} brawl ended in mutual chaos.`);
+        }
+      }, 340);
+    }
+
+    function startNinePersonRiot() {
+      switchTab("scene-view");
+      bumpChaos(35);
+      const banner = document.getElementById("brawl-banner");
+      const vp = document.getElementById("compound-viewport");
+      const layer = document.getElementById("characters-layer");
+
+      if (banner) {
+        banner.textContent = "9-PERSON FREE-FOR-ALL RIOT // SECTOR 09";
+        banner.classList.add("active");
+      }
+      vp.classList.add("quake-burst");
+      audioManager.playFunnySfx("airhorn");
+      logActivity("9-PERSON RIOT ACTIVE — EVERYONE IS SWINGING!");
+
+      clearInterval(state.brawlTimer);
+      let ticks = 0;
+      state.brawlTimer = setInterval(() => {
+        ticks += 1;
+        COMMITTEE_CONFIG.members.forEach((m, idx) => {
+          const actor = document.getElementById(`actor-${m.id}`);
+          if (!actor) return;
+          const x = 14 + ((idx * 10 + ticks * 17 + Math.random() * 14) % 74);
+          const y = 76 + ((idx * 7 + ticks * 11) % 18);
+          actor.style.left = `${x}%`;
+          actor.style.top = `${y}%`;
+          const att = (ticks + idx) % 2 === 0;
+          actor.classList.toggle("is-brawling-attacker", att);
+          actor.classList.toggle("is-brawling-victim", !att);
+        });
+
+        const rect = layer.getBoundingClientRect();
+        spawnHitSpark(layer, rect.width * (0.25 + Math.random() * 0.5), rect.height * (0.65 + Math.random() * 0.2), "RIOT!");
+        audioManager.playFunnySfx(ticks % 2 === 0 ? "bonk" : "squeak");
+
+        if (ticks >= 10) {
+          clearInterval(state.brawlTimer);
+          vp.classList.remove("quake-burst");
+          if (banner) banner.classList.remove("active");
+          COMMITTEE_CONFIG.members.forEach((m) => {
+            const actor = document.getElementById(`actor-${m.id}`);
+            if (!actor) return;
+            actor.classList.remove("is-brawling-attacker", "is-brawling-victim");
+            actor.style.left = `${m.position.x}%`;
+            actor.style.top = `${m.position.y}%`;
+          });
+          const winner = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+          triggerCharacter(winner.id, { bypassCooldown: true });
+          logActivity(`Riot over! ${winner.name} claims the rubble.`);
+        }
+      }, 320);
+    }
+
+    function triggerYeetAll() {
+      switchTab("scene-view");
+      bumpChaos(28);
+      audioManager.playFunnySfx("slideWhistle");
+      logActivity("YEET ALL — ALL 9 MEMBERS LAUNCHED INTO ORBIT!");
+      const layer = document.getElementById("characters-layer");
+      const rect = layer.getBoundingClientRect();
+
+      COMMITTEE_CONFIG.members.forEach((m, idx) => {
+        const actor = document.getElementById(`actor-${m.id}`);
+        if (!actor) return;
+        actor.classList.remove("react-yeet");
+        void actor.offsetWidth;
+        actor.classList.add("react-yeet");
+        actor.style.left = `${12 + ((idx * 10 + Math.random() * 12) % 78)}%`;
+        actor.style.top = `${62 + ((idx * 5) % 26)}%`;
+        spawnHitSpark(layer, rect.width * (0.15 + idx * 0.09), rect.height * 0.65, "YEET!");
+
+        setTimeout(() => {
+          actor.classList.remove("react-yeet");
+          actor.style.left = `${m.position.x}%`;
+          actor.style.top = `${m.position.y}%`;
+        }, 1600);
+      });
+    }
+
+    function toggleRoastMode() {
+      state.roastMode = !state.roastMode;
+      document.body.classList.toggle("roast-mode", state.roastMode);
+      const btn = document.getElementById("btn-roast-mode");
+      if (btn) btn.textContent = state.roastMode ? "Roast Mode: ON" : "Roast Mode";
+      audioManager.playFunnySfx("boing");
+      logActivity(state.roastMode ? "ROAST MODE ON — SAVAGE LINES ACTIVE!" : "ROAST MODE OFF — CLASSIC LINES RESTORED.");
+      const target = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+      triggerCharacter(target.id, { bypassCooldown: true, quietLog: true });
+    }
+
+    function triggerUnleashChaos() {
+      bumpChaos(25);
+      audioManager.playFunnySfx("airhorn");
+      logActivity("CHAOS UNLEASHED // ALL 9 MEMBERS REACTING");
+      const vp = document.getElementById("compound-viewport");
+      vp.classList.add("quake-burst");
+      setTimeout(() => vp.classList.remove("quake-burst"), 900);
+
+      COMMITTEE_CONFIG.members.forEach((m, i) => {
+        const actor = document.getElementById(`actor-${m.id}`);
+        if (!actor) return;
+        actor.style.left = `${12 + Math.random() * 78}%`;
+        actor.style.top = `${75 + Math.random() * 18}%`;
+        setTimeout(() => {
+          triggerCharacter(m.id, { silent: i > 1, keepOtherBubbles: true, bypassCooldown: true, quietLog: true });
+        }, i * 130);
+        setTimeout(() => {
+          actor.style.left = `${m.position.x}%`;
+          actor.style.top = `${m.position.y}%`;
+        }, 3200);
+      });
+    }
+
+    function triggerRandomMember() {
+      bumpChaos(5);
+      document.querySelectorAll(".character-actor.is-highlighted").forEach((el) => el.classList.remove("is-highlighted"));
+      const m = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+      const actor = document.getElementById(`actor-${m.id}`);
+      if (actor) {
+        actor.classList.add("is-highlighted");
+        setTimeout(() => actor.classList.remove("is-highlighted"), 3600);
+      }
+      triggerCharacter(m.id, { bypassCooldown: true });
+    }
+
+    function startBlinkingLoop() {
+      COMMITTEE_CONFIG.members.forEach((m) => {
+        const loop = () => {
+          setTimeout(() => {
+            const actor = document.getElementById(`actor-${m.id}`);
+            if (actor) {
+              actor.classList.add("is-blinking");
+              setTimeout(() => actor.classList.remove("is-blinking"), 130);
+            }
+            loop();
+          }, 2200 + Math.random() * 4200);
+        };
+        loop();
+      });
+    }
+
+    function startAutonomousLife() {
+      setInterval(() => {
+        const sceneOn = document.getElementById("scene-view").classList.contains("active");
+        const modalOn = document.getElementById("dossier-backdrop").classList.contains("open");
+        if (!sceneOn || modalOn || document.hidden) return;
+        const ms = COMMITTEE_CONFIG.members;
+        const a = ms[Math.floor(Math.random() * ms.length)];
+        const b = ms[Math.floor(Math.random() * ms.length)];
+        triggerCharacter(a.id, { silent: true, keepOtherBubbles: true, quietLog: true });
+        setTimeout(() => triggerCharacter(b.id, { silent: true, keepOtherBubbles: true, quietLog: true }), 600);
+      }, COMMITTEE_CONFIG.settings.autonomousIntervalMs);
+    }
+
+    function getRemainingMs(endPerf) {
+      return Math.max(0, Math.round(endPerf - performance.now()));
+    }
+
+    /* ==========================================================================
+       GAME 1: মৎসলোভি সাইজিদ (30 SECOND TIMER)
+       ========================================================================== */
+    const RUI_DURATION_MS = 30000;
+    const ruiGame = {
+      running: false,
+      score: 0,
+      endPerf: 0,
+      spawnTimer: null,
+      moveTimer: null,
+      clockTimer: null,
+      items: [],
+      faces: []
+    };
+
+    const RUI_PLUS_FISH = [
+      { emoji: "🐟", pts: 20 },
+      { emoji: "🐠", pts: 30 },
+      { emoji: "🐡", pts: 40 },
+      { emoji: "🦈", pts: 55 }
+    ];
+
+    const RUI_MINUS_ITEMS = [
+      { emoji: "🐷", pts: -20 },
+      { emoji: "🌿", pts: -15 },
+      { emoji: "🛢️", pts: -15 },
+      { emoji: "🐘", pts: -25 }
+    ];
+
+    function clearRuiArena() {
+      const arena = document.getElementById("rui-arena");
+      arena.querySelectorAll(".rui-emoji-item, .rui-thrown-face").forEach((el) => el.remove());
+      ruiGame.items = [];
+      ruiGame.faces = [];
+    }
+
+    function stopRuiTimers() {
+      clearInterval(ruiGame.spawnTimer);
+      clearInterval(ruiGame.moveTimer);
+      clearInterval(ruiGame.clockTimer);
+    }
+
+    function endRuiGame(reasonText, remMs, touchedFace = false) {
+      ruiGame.running = false;
+      stopRuiTimers();
+      clearRuiArena();
+
+      const finalScore = touchedFace ? 0 : ruiGame.score;
+      const rankMsg = touchedFace
+        ? "তুই শুয়োরছানা"
+        : getScoreTierMessage(finalScore, { brahmin: 180, kshatriya: 100, shudra: 45 });
+      const msStr = `${remMs} ms`;
+
+      document.getElementById("rui-time").textContent = msStr;
+      document.getElementById("rui-status").textContent = "FINISHED";
+      document.getElementById("rui-big-score").textContent = `${finalScore} PTS`;
+      document.getElementById("rui-big-rank").textContent = rankMsg;
+      document.getElementById("rui-big-detail").textContent = `${reasonText} | Time Left: ${msStr}`;
+      document.getElementById("rui-score-overlay").classList.add("active");
+      document.getElementById("rui-outcome").textContent = `${rankMsg} — Score: ${finalScore} PTS (${reasonText})`;
+      logActivity(`মৎসলোভি সাইজিদ: ${rankMsg} (${finalScore} PTS)`);
+    }
+
+    function launchParabolicMemberFace() {
+      if (!ruiGame.running) return;
+      const arena = document.getElementById("rui-arena");
+      const member = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "rui-thrown-face";
+      el.title = `DO NOT TOUCH ${member.name}`;
+
+      const avWrap = document.createElement("div");
+      avWrap.className = "rui-face-av";
+      avWrap.appendChild(createAvatarVisual(member));
+
+      const badge = document.createElement("span");
+      badge.className = "rui-face-name";
+      badge.textContent = member.name;
+
+      el.appendChild(avWrap);
+      el.appendChild(badge);
+
+      const w = Math.max(220, arena.clientWidth);
+      const h = Math.max(220, arena.clientHeight);
+      const startX = 20 + Math.random() * Math.max(40, w - 76);
+      const centerBias = (w * 0.5 - startX) * 0.011;
+
+      const faceObj = {
+        el,
+        x: startX,
+        y: h - 18,
+        vx: centerBias + (Math.random() - 0.5) * 2.4,
+        vy: -(8.6 + Math.random() * 2.4),
+        gravity: 0.25
+      };
+
+      el.style.left = `${faceObj.x}px`;
+      el.style.top = `${faceObj.y}px`;
+
+      el.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        if (!ruiGame.running) return;
+        const rem = getRemainingMs(ruiGame.endPerf);
+        audioManager.playFunnySfx("wahWah");
+        endRuiGame(`Touched ${member.name}'s face!`, rem, true);
+      });
+
+      arena.appendChild(el);
+      ruiGame.faces.push(faceObj);
+    }
+
+    function launchParabolicItem() {
+      if (!ruiGame.running) return;
+      const arena = document.getElementById("rui-arena");
+      const isMinus = Math.random() < 0.36;
+      const spec = isMinus
+        ? RUI_MINUS_ITEMS[Math.floor(Math.random() * RUI_MINUS_ITEMS.length)]
+        : RUI_PLUS_FISH[Math.floor(Math.random() * RUI_PLUS_FISH.length)];
+
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "rui-emoji-item";
+      el.textContent = spec.emoji;
+
+      const w = Math.max(220, arena.clientWidth);
+      const h = Math.max(220, arena.clientHeight);
+      const startX = 18 + Math.random() * Math.max(40, w - 70);
+      const centerBias = (w * 0.5 - startX) * 0.011;
+
+      const obj = {
+        el,
+        pts: spec.pts,
+        x: startX,
+        y: h - 16,
+        vx: centerBias + (Math.random() - 0.5) * 2.8,
+        vy: -(8.4 + Math.random() * 2.6),
+        gravity: 0.25
+      };
+
+      el.style.left = `${obj.x}px`;
+      el.style.top = `${obj.y}px`;
+
+      el.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        if (!ruiGame.running) return;
+        ruiGame.score = Math.max(0, ruiGame.score + obj.pts);
+        document.getElementById("rui-score").textContent = String(ruiGame.score);
+        audioManager.playFunnySfx(obj.pts > 0 ? "pop" : "wahWah");
+        spawnHitSpark(arena, obj.x + 14, obj.y, obj.pts > 0 ? `+${obj.pts}` : `${obj.pts}`);
+        el.remove();
+        ruiGame.items = ruiGame.items.filter((x) => x !== obj);
+      });
+
+      arena.appendChild(el);
+      ruiGame.items.push(obj);
+    }
+
+    function beginRuiGameplay() {
+      ruiGame.running = true;
+      ruiGame.score = 0;
+      ruiGame.endPerf = performance.now() + RUI_DURATION_MS;
+
+      document.getElementById("rui-score").textContent = "0";
+      document.getElementById("rui-time").textContent = `${RUI_DURATION_MS} ms`;
+      document.getElementById("rui-status").textContent = "LIVE (30s)";
+      document.getElementById("rui-outcome").textContent = "30s timer running! Catch fish and avoid member faces!";
+
+      launchParabolicItem();
+      launchParabolicMemberFace();
+
+      ruiGame.clockTimer = setInterval(() => {
+        if (!ruiGame.running) return;
+        const rem = getRemainingMs(ruiGame.endPerf);
+        document.getElementById("rui-time").textContent = `${rem} ms`;
+        if (rem <= 0) {
+          audioManager.playFunnySfx("boing");
+          endRuiGame("30s timer complete!", 0, false);
+        }
+      }, 37);
+
+      ruiGame.spawnTimer = setInterval(() => {
+        if (!ruiGame.running) return;
+        launchParabolicItem();
+        if (Math.random() < 0.45) {
+          launchParabolicMemberFace();
+        }
+      }, 420);
+
+      ruiGame.moveTimer = setInterval(() => {
+        if (!ruiGame.running) return;
+        const arena = document.getElementById("rui-arena");
+        const w = arena.clientWidth;
+        const h = arena.clientHeight;
+
+        for (let i = ruiGame.items.length - 1; i >= 0; i -= 1) {
+          const it = ruiGame.items[i];
+          it.x += it.vx;
+          it.y += it.vy;
+          it.vy += it.gravity;
+          if (it.x < 4 || it.x > w - 42) it.vx *= -0.85;
+          it.el.style.left = `${it.x}px`;
+          it.el.style.top = `${it.y}px`;
+
+          if (it.vy > 0 && it.y > h + 20) {
+            it.el.remove();
+            ruiGame.items.splice(i, 1);
+          }
+        }
+
+        for (let i = ruiGame.faces.length - 1; i >= 0; i -= 1) {
+          const f = ruiGame.faces[i];
+          f.x += f.vx;
+          f.y += f.vy;
+          f.vy += f.gravity;
+          if (f.x < 4 || f.x > w - 46) f.vx *= -0.85;
+          f.el.style.left = `${f.x}px`;
+          f.el.style.top = `${f.y}px`;
+
+          if (f.vy > 0 && f.y > h + 24) {
+            f.el.remove();
+            ruiGame.faces.splice(i, 1);
+          }
+        }
+      }, 24);
+    }
+
+    function startRuiGame() {
+      ruiGame.running = false;
+      stopRuiTimers();
+      clearRuiArena();
+      document.getElementById("rui-score-overlay").classList.remove("active");
+      document.getElementById("rui-score").textContent = "0";
+      document.getElementById("rui-time").textContent = `${RUI_DURATION_MS} ms`;
+      document.getElementById("rui-status").textContent = "COUNTDOWN";
+      expandGameCard("game-card-rui");
+
+      runThreeSecondCountdown("rui", "rui-countdown", "rui-countdown-num", () => {
+        beginRuiGameplay();
+      });
+    }
+
+    /* ==========================================================================
+       GAME 2: আলির গুহা (20 SECOND TIMER)
+       ========================================================================== */
+    const HOLE_DURATION_MS = 20000;
+    const holeGame = {
+      running: false,
+      score: 0,
+      endPerf: 0,
+      popTimer: null,
+      clockTimer: null,
+      holes: []
+    };
+
+    function buildFiveHoles() {
+      const grid = document.getElementById("holes-grid");
+      grid.innerHTML = "";
+      holeGame.holes = [];
+
+      for (let i = 0; i < 5; i += 1) {
+        const holeEl = document.createElement("div");
+        holeEl.className = "rabbit-hole";
+
+        const moleEl = document.createElement("button");
+        moleEl.type = "button";
+        moleEl.className = "hole-mole";
+
+        const avatarHolder = document.createElement("div");
+        avatarHolder.style.width = "54px";
+        avatarHolder.style.height = "62px";
+
+        const badgeEl = document.createElement("div");
+        badgeEl.className = "hole-name-badge";
+        badgeEl.textContent = "---";
+
+        moleEl.appendChild(avatarHolder);
+        moleEl.appendChild(badgeEl);
+
+        const pitEl = document.createElement("div");
+        pitEl.className = "hole-pit";
+
+        const slotObj = {
+          index: i,
+          moleEl,
+          avatarHolder,
+          badgeEl,
+          currentMember: null,
+          isDecoy: false,
+          hideTimeout: null
+        };
+
+        moleEl.addEventListener("pointerdown", (e) => {
+          e.stopPropagation();
+          if (!holeGame.running || !slotObj.currentMember) return;
+          const m = slotObj.currentMember;
+          const wasDecoy = slotObj.isDecoy;
+          slotObj.currentMember = null;
+          slotObj.isDecoy = false;
+          moleEl.classList.remove("popped");
+          clearTimeout(slotObj.hideTimeout);
+
+          const arena = document.getElementById("hole-arena");
+          if (wasDecoy) {
+            holeGame.score = Math.max(0, holeGame.score - 20);
+            document.getElementById("hole-kills").textContent = String(holeGame.score);
+            audioManager.playFunnySfx("wahWah");
+            spawnHitSpark(arena, 90 + (i % 3) * 80, 110 + Math.floor(i / 3) * 80, "-20 DECOY!");
+            return;
+          }
+
+          holeGame.score += 20;
+          document.getElementById("hole-kills").textContent = String(holeGame.score);
+          audioManager.playFunnySfx("bonk");
+          spawnHitSpark(arena, 90 + (i % 3) * 80, 110 + Math.floor(i / 3) * 80, `+20 ${m.name}!`);
+        });
+
+        holeEl.appendChild(moleEl);
+        holeEl.appendChild(pitEl);
+        grid.appendChild(holeEl);
+        holeGame.holes.push(slotObj);
+      }
+    }
+
+    function finishHoleGame() {
+      holeGame.running = false;
+      clearInterval(holeGame.popTimer);
+      clearInterval(holeGame.clockTimer);
+      holeGame.holes.forEach((h) => {
+        h.currentMember = null;
+        h.isDecoy = false;
+        h.moleEl.classList.remove("popped");
+        clearTimeout(h.hideTimeout);
+      });
+
+      const finalScore = holeGame.score;
+      const rankMsg = getScoreTierMessage(finalScore, { brahmin: 180, kshatriya: 100, shudra: 40 });
+      document.getElementById("hole-time").textContent = "0 ms";
+      document.getElementById("hole-status").textContent = "FINISHED";
+      document.getElementById("hole-big-score").textContent = `${finalScore} PTS`;
+      document.getElementById("hole-big-rank").textContent = rankMsg;
+      document.getElementById("hole-big-detail").textContent = `আলির গুহা 20s round complete! Final Score: ${finalScore} PTS`;
+      document.getElementById("hole-score-overlay").classList.add("active");
+      document.getElementById("hole-outcome").textContent = `${rankMsg} — Score: ${finalScore} PTS`;
+      logActivity(`আলির গুহা: ${rankMsg} (${finalScore} PTS)`);
+    }
+
+    function beginHoleGameplay() {
+      holeGame.running = true;
+      holeGame.score = 0;
+      holeGame.endPerf = performance.now() + HOLE_DURATION_MS;
+
+      document.getElementById("hole-kills").textContent = "0";
+      document.getElementById("hole-time").textContent = `${HOLE_DURATION_MS} ms`;
+      document.getElementById("hole-status").textContent = "HUNT (20s)";
+      document.getElementById("hole-outcome").textContent = "20s timer running! Avoid red DECOY fakes!";
+
+      holeGame.clockTimer = setInterval(() => {
+        if (!holeGame.running) return;
+        const rem = getRemainingMs(holeGame.endPerf);
+        document.getElementById("hole-time").textContent = `${rem} ms`;
+        if (rem <= 0) {
+          audioManager.playFunnySfx("boing");
+          finishHoleGame();
+        }
+      }, 37);
+
+      holeGame.popTimer = setInterval(() => {
+        if (!holeGame.running) return;
+        const member = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+        const slot = holeGame.holes[Math.floor(Math.random() * holeGame.holes.length)];
+        const decoy = Math.random() < 0.28;
+
+        clearTimeout(slot.hideTimeout);
+        slot.currentMember = member;
+        slot.isDecoy = decoy;
+        slot.badgeEl.textContent = decoy ? `FAKE ${member.name}` : member.name;
+        slot.badgeEl.classList.toggle("decoy", decoy);
+        slot.avatarHolder.innerHTML = "";
+        slot.avatarHolder.appendChild(createAvatarVisual(member));
+        slot.moleEl.classList.add("popped");
+
+        slot.hideTimeout = setTimeout(() => {
+          slot.currentMember = null;
+          slot.isDecoy = false;
+          slot.moleEl.classList.remove("popped");
+        }, 470);
+      }, 280);
+    }
+
+    function startHoleGame() {
+      holeGame.running = false;
+      clearInterval(holeGame.popTimer);
+      clearInterval(holeGame.clockTimer);
+      buildFiveHoles();
+      document.getElementById("hole-score-overlay").classList.remove("active");
+      document.getElementById("hole-kills").textContent = "0";
+      document.getElementById("hole-time").textContent = `${HOLE_DURATION_MS} ms`;
+      document.getElementById("hole-status").textContent = "COUNTDOWN";
+      expandGameCard("game-card-hole");
+
+      runThreeSecondCountdown("hole", "hole-countdown", "hole-countdown-num", () => {
+        beginHoleGameplay();
+      });
+    }
+
+    /* ==========================================================================
+       GAME 3: ব্যারেল মাগিকে মারো (20 SECOND TIMER)
+       ========================================================================== */
+    const BARREL_DURATION_MS = 20000;
+    const barrelGame = {
+      running: false,
+      hits: 0,
+      score: 0,
+      endPerf: 0,
+      peekTimer: null,
+      clockTimer: null,
+      stations: []
+    };
+
+    function buildBarrelStations() {
+      const lanes = document.getElementById("barrel-lanes");
+      lanes.innerHTML = "";
+      barrelGame.stations = [];
+
+      for (let i = 0; i < 3; i += 1) {
+        const stEl = document.createElement("div");
+        stEl.className = "barrel-station";
+
+        const peeker = document.createElement("button");
+        peeker.type = "button";
+        peeker.className = "barrel-peeker";
+
+        const tag = document.createElement("div");
+        tag.className = "barrel-peeker-tag";
+        tag.textContent = "TARGET";
+
+        const visualHolder = document.createElement("div");
+        visualHolder.style.width = "62px";
+        visualHolder.style.height = "72px";
+        visualHolder.style.display = "flex";
+        visualHolder.style.alignItems = "center";
+        visualHolder.style.justifyContent = "center";
+
+        peeker.appendChild(tag);
+        peeker.appendChild(visualHolder);
+
+        const drum = document.createElement("div");
+        drum.className = "drum-cover";
+        drum.textContent = "ব্যারেল";
+
+        const stationObj = {
+          index: i,
+          peeker,
+          tag,
+          visualHolder,
+          activeMember: null,
+          isPig: false,
+          hideTimer: null
+        };
+
+        peeker.addEventListener("pointerdown", (e) => {
+          e.stopPropagation();
+          if (!barrelGame.running) return;
+          const wasPig = stationObj.isPig;
+          const m = stationObj.activeMember;
+          stationObj.activeMember = null;
+          stationObj.isPig = false;
+          peeker.classList.remove("exposed");
+          clearTimeout(stationObj.hideTimer);
+
+          const arena = document.getElementById("barrel-arena");
+          if (wasPig) {
+            barrelGame.score = Math.max(0, barrelGame.score - 20);
+            barrelGame.hits = Math.max(0, barrelGame.hits - 1);
+            document.getElementById("barrel-hits").textContent = String(barrelGame.hits);
+            document.getElementById("barrel-score").textContent = String(barrelGame.score);
+            audioManager.playFunnySfx("squeak");
+            spawnHitSpark(arena, 85 + i * 115, 165, "PIG -20!");
+            return;
+          }
+
+          if (!m) return;
+          barrelGame.hits += 1;
+          barrelGame.score += 20;
+          document.getElementById("barrel-hits").textContent = String(barrelGame.hits);
+          document.getElementById("barrel-score").textContent = String(barrelGame.score);
+          audioManager.playFunnySfx("bonk");
+          spawnHitSpark(arena, 85 + i * 115, 165, `+20 ${m.name}!`);
+        });
+
+        stEl.appendChild(peeker);
+        stEl.appendChild(drum);
+        lanes.appendChild(stEl);
+        barrelGame.stations.push(stationObj);
+      }
+    }
+
+    function finishBarrelGame() {
+      barrelGame.running = false;
+      clearInterval(barrelGame.peekTimer);
+      clearInterval(barrelGame.clockTimer);
+      barrelGame.stations.forEach((s) => {
+        s.activeMember = null;
+        s.isPig = false;
+        s.peeker.classList.remove("exposed");
+        clearTimeout(s.hideTimer);
+      });
+
+      const finalScore = barrelGame.score;
+      const rankMsg = getScoreTierMessage(finalScore, { brahmin: 180, kshatriya: 100, shudra: 40 });
+      document.getElementById("barrel-time").textContent = "0 ms";
+      document.getElementById("barrel-big-score").textContent = `${finalScore} PTS`;
+      document.getElementById("barrel-big-rank").textContent = rankMsg;
+      document.getElementById("barrel-big-detail").textContent = `Hits: ${barrelGame.hits} | Final Score: ${finalScore} PTS`;
+      document.getElementById("barrel-score-overlay").classList.add("active");
+      document.getElementById("barrel-outcome").textContent = `${rankMsg} — Score: ${finalScore} PTS (${barrelGame.hits} hits)`;
+      logActivity(`ব্যারেল মাগিকে মারো: ${rankMsg} (${finalScore} PTS)`);
+    }
+
+    function beginBarrelGameplay() {
+      barrelGame.running = true;
+      barrelGame.hits = 0;
+      barrelGame.score = 0;
+      barrelGame.endPerf = performance.now() + BARREL_DURATION_MS;
+
+      document.getElementById("barrel-hits").textContent = "0";
+      document.getElementById("barrel-score").textContent = "0";
+      document.getElementById("barrel-time").textContent = `${BARREL_DURATION_MS} ms`;
+      document.getElementById("barrel-outcome").textContent = "20s timer running! Shoot targets and DO NOT shoot Pigs (🐷)!";
+
+      barrelGame.clockTimer = setInterval(() => {
+        if (!barrelGame.running) return;
+        const rem = getRemainingMs(barrelGame.endPerf);
+        document.getElementById("barrel-time").textContent = `${rem} ms`;
+        if (rem <= 0) {
+          audioManager.playFunnySfx("boing");
+          finishBarrelGame();
+        }
+      }, 37);
+
+      barrelGame.peekTimer = setInterval(() => {
+        if (!barrelGame.running) return;
+        const st = barrelGame.stations[Math.floor(Math.random() * barrelGame.stations.length)];
+        const isPig = Math.random() < 0.34;
+        const member = COMMITTEE_CONFIG.members[Math.floor(Math.random() * COMMITTEE_CONFIG.members.length)];
+
+        clearTimeout(st.hideTimer);
+        st.isPig = isPig;
+        st.activeMember = isPig ? null : member;
+        st.visualHolder.innerHTML = "";
+
+        if (isPig) {
+          st.tag.textContent = "PIG 🐷";
+          st.tag.classList.add("pig-tag");
+          st.visualHolder.innerHTML = `<span class="barrel-pig-emoji">🐷</span>`;
+        } else {
+          st.tag.textContent = member.name;
+          st.tag.classList.remove("pig-tag");
+          st.visualHolder.appendChild(createAvatarVisual(member));
+        }
+
+        st.peeker.classList.add("exposed");
+
+        st.hideTimer = setTimeout(() => {
+          st.activeMember = null;
+          st.isPig = false;
+          st.peeker.classList.remove("exposed");
+        }, 460);
+      }, 390);
+    }
+
+    function startBarrelGame() {
+      barrelGame.running = false;
+      clearInterval(barrelGame.peekTimer);
+      clearInterval(barrelGame.clockTimer);
+      buildBarrelStations();
+      document.getElementById("barrel-score-overlay").classList.remove("active");
+      document.getElementById("barrel-hits").textContent = "0";
+      document.getElementById("barrel-score").textContent = "0";
+      document.getElementById("barrel-time").textContent = `${BARREL_DURATION_MS} ms`;
+      expandGameCard("game-card-barrel");
+
+      const arena = document.getElementById("barrel-arena");
+      if (!arena._shootBound) {
+        arena._shootBound = true;
+        arena.addEventListener("pointerdown", (e) => {
+          if (!barrelGame.running) return;
+          const rect = arena.getBoundingClientRect();
+          const flash = document.createElement("div");
+          flash.className = "muzzle-flash";
+          flash.style.left = `${e.clientX - rect.left}px`;
+          flash.style.top = `${e.clientY - rect.top}px`;
+          arena.appendChild(flash);
+          setTimeout(() => flash.remove(), 240);
+          audioManager.playFunnySfx("pop");
+        });
+      }
+
+      runThreeSecondCountdown("barrel", "barrel-countdown", "barrel-countdown-num", () => {
+        beginBarrelGameplay();
+      });
+    }
+
+    /* ==========================================================================
+       GAME 4: অভাগা শুয়োর (SPINNING WHEEL WITH ALL 9 MEMBERS)
+       ========================================================================== */
+    const workWheelGame = {
+      spinning: false,
+      spins: 0,
+      angle: 0,
+      wheelOrder: [...COMMITTEE_CONFIG.members],
+      tasks: [
+        "scrub the Sector 09 oil drums",
+        "count 400 rui fish at dawn",
+        "broker a deal nobody wants",
+        "explain marriage rules to Nafi",
+        "measure 16 inches with a wet ruler",
+        "survive Billal's morning greeting",
+        "listen to Anam wheeze for 20 minutes",
+        "fix the tilted SECTOR // 09 sign",
+        "sweep the broken crate splinters"
+      ]
+    };
+
+    function renderWheelLabels() {
+      const wheel = document.getElementById("work-wheel");
+      wheel.querySelectorAll(".wheel-slot-label").forEach((el) => el.remove());
+
+      const isExpanded = wheel.closest(".game-card")?.classList.contains("is-expanded-game");
+      const count = workWheelGame.wheelOrder.length;
+      const step = 360 / count;
+      const r = isExpanded ? 92 : 64;
+
+      workWheelGame.wheelOrder.forEach((m, idx) => {
+        const midAngle = idx * step + step / 2 - 90;
+        const rad = (midAngle * Math.PI) / 180;
+        const x = Math.cos(rad) * r;
+        const y = Math.sin(rad) * r;
+
+        const lbl = document.createElement("div");
+        lbl.className = "wheel-slot-label";
+        lbl.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${midAngle + 90}deg)`;
+        lbl.textContent = m.name;
+        wheel.appendChild(lbl);
+      });
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function beginWheelSpin() {
+      workWheelGame.spinning = true;
+      workWheelGame.spins += 1;
+
+      workWheelGame.wheelOrder = shuffleArray(COMMITTEE_CONFIG.members);
+      renderWheelLabels();
+
+      document.getElementById("wheel-spins").textContent = String(workWheelGame.spins);
+      document.getElementById("wheel-status").textContent = "SPINNING";
+      document.getElementById("wheel-task").textContent = "Shuffling members & spinning...";
+      audioManager.playFunnySfx("slideWhistle");
+
+      const sliceDeg = 360 / workWheelGame.wheelOrder.length;
+      const targetIndex = Math.floor(Math.random() * workWheelGame.wheelOrder.length);
+      const extraTurns = 4 + Math.floor(Math.random() * 3);
+      const desiredOffset = 360 - (targetIndex * sliceDeg + sliceDeg / 2);
+      const currentMod = ((workWheelGame.angle % 360) + 360) % 360;
+      let delta = desiredOffset - currentMod;
+      if (delta < 0) delta += 360;
+
+      workWheelGame.angle += extraTurns * 360 + delta;
+      const wheel = document.getElementById("work-wheel");
+      wheel.style.transform = `rotate(${workWheelGame.angle}deg)`;
+
+      setTimeout(() => {
+        const chosen = workWheelGame.wheelOrder[targetIndex];
+        const task = workWheelGame.tasks[Math.floor(Math.random() * workWheelGame.tasks.length)];
+        document.getElementById("wheel-assignee").textContent = chosen.name.toUpperCase();
+        document.getElementById("wheel-status").textContent = "DONE";
+        document.getElementById("wheel-task").textContent = `${chosen.name} must ${task}!`;
+        document.getElementById("wheel-outcome").textContent = `অভাগা শুয়োর: ${chosen.name} — "${chosen.dialogue}"`;
+        audioManager.playFunnySfx("boing");
+        logActivity(`অভাগা শুয়োর: ${chosen.name} got stuck to ${task}!`);
+        workWheelGame.spinning = false;
+      }, 2250);
+    }
+
+    function spinWorkWheel() {
+      if (workWheelGame.spinning) return;
+      expandGameCard("game-card-wheel");
+      document.getElementById("wheel-status").textContent = "COUNTDOWN";
+      runThreeSecondCountdown("wheel", "wheel-countdown", "wheel-countdown-num", () => {
+        beginWheelSpin();
+      });
+    }
+
+    /* ==========================================================================
+       GAME 5: মারা দিতে কে গেছে? (8 OF 9 FOR 3000ms -> ALL 9 CHOICES)
+       ========================================================================== */
+    const missingGame = {
+      round: 0,
+      score: 0,
+      phase: "IDLE",
+      missingMember: null,
+      previewTimeout: null
+    };
+
+    function beginMissingMemberRound() {
+      missingGame.round += 1;
+      missingGame.phase = "PREVIEW";
+
+      const allMembers = [...COMMITTEE_CONFIG.members];
+      const missingIdx = Math.floor(Math.random() * allMembers.length);
+      const missingMember = allMembers[missingIdx];
+      missingGame.missingMember = missingMember;
+
+      const presentEight = shuffleArray(allMembers.filter((m) => m.id !== missingMember.id));
+
+      document.getElementById("missing-round").textContent = String(missingGame.round);
+      document.getElementById("missing-phase").textContent = "WATCH (3s)";
+      document.getElementById("missing-prompt").textContent = "8 of 9 members shown for 3000 ms — memorize who is here!";
+      document.getElementById("missing-outcome").textContent = "Inspecting the 8 members...";
+
+      const grid = document.getElementById("missing-grid");
+      grid.className = "missing-eight-grid";
+      grid.innerHTML = "";
+
+      presentEight.forEach((m) => {
+        const tile = document.createElement("div");
+        tile.className = "missing-member-tile";
+
+        const av = document.createElement("div");
+        av.className = "missing-member-av";
+        av.appendChild(createAvatarVisual(m));
+
+        const nm = document.createElement("div");
+        nm.className = "missing-member-name";
+        nm.textContent = m.name;
+
+        tile.appendChild(av);
+        tile.appendChild(nm);
+        grid.appendChild(tile);
+      });
+
+      audioManager.playFunnySfx("pop");
+
+      missingGame.previewTimeout = setTimeout(() => {
+        if (missingGame.phase !== "PREVIEW") return;
+        showMissingMemberChoices();
+      }, 3000);
+    }
+
+    function startMissingMemberRound() {
+      clearTimeout(missingGame.previewTimeout);
+      missingGame.phase = "COUNTDOWN";
+      expandGameCard("game-card-missing");
+      document.getElementById("missing-phase").textContent = "COUNTDOWN";
+
+      runThreeSecondCountdown("missing", "missing-countdown", "missing-countdown-num", () => {
+        beginMissingMemberRound();
+      });
+    }
+
+    function showMissingMemberChoices() {
+      missingGame.phase = "GUESS";
+      audioManager.playFunnySfx("sproing");
+      document.getElementById("missing-phase").textContent = "PICK ONE";
+      document.getElementById("missing-prompt").textContent = "মারা দিতে কে গেছে? — Who was missing?";
+      document.getElementById("missing-outcome").textContent = "Select one of the 9 member names below.";
+
+      const grid = document.getElementById("missing-grid");
+      grid.className = "missing-choices-grid";
+      grid.innerHTML = "";
+
+      const choices = shuffleArray(COMMITTEE_CONFIG.members);
+      choices.forEach((candidate) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "missing-choice-btn";
+        btn.textContent = candidate.name;
+        btn.addEventListener("click", () => resolveMissingGuess(candidate, btn));
+        grid.appendChild(btn);
+      });
+    }
+
+    function resolveMissingGuess(selectedMember, clickedBtn) {
+      if (missingGame.phase !== "GUESS") return;
+      missingGame.phase = "RESOLVED";
+
+      const isCorrect = selectedMember.id === missingGame.missingMember.id;
+      const allBtns = document.querySelectorAll("#missing-grid .missing-choice-btn");
+      allBtns.forEach((b) => {
+        b.disabled = true;
+        if (b.textContent === missingGame.missingMember.name) {
+          b.classList.add("choice-pass");
+        }
+      });
+
+      if (isCorrect) {
+        missingGame.score += 10;
+        document.getElementById("missing-score").textContent = String(missingGame.score);
+        document.getElementById("missing-phase").textContent = "PASS";
+        document.getElementById("missing-prompt").textContent = "তুমি ব্রাহ্মণ";
+        document.getElementById("missing-outcome").textContent =
+          `তুমি ব্রাহ্মণ — Missing member was ${missingGame.missingMember.name}.`;
+        audioManager.playFunnySfx("boing");
+        logActivity(`মারা দিতে কে গেছে?: তুমি ব্রাহ্মণ (Missing: ${missingGame.missingMember.name})`);
+      } else {
+        clickedBtn.classList.add("choice-fail");
+        document.getElementById("missing-phase").textContent = "FAIL";
+        document.getElementById("missing-prompt").textContent = "তুমি শুয়োর ছানা";
+        document.getElementById("missing-outcome").textContent =
+          `তুমি শুয়োর ছানা — Wrong pick (${selectedMember.name}). Missing member was ${missingGame.missingMember.name}.`;
+        audioManager.playFunnySfx("wahWah");
+        logActivity(`মারা দিতে কে গেছে?: তুমি শুয়োর ছানা (Actual missing: ${missingGame.missingMember.name})`);
+      }
+    }
+
+    function stopAllActiveGames() {
+      ["rui", "hole", "barrel", "wheel", "missing"].forEach((k) => {
+        cancelCountdown(k, `${k}-countdown`);
+      });
+      ruiGame.running = false;
+      stopRuiTimers();
+      clearRuiArena();
+
+      holeGame.running = false;
+      clearInterval(holeGame.popTimer);
+      clearInterval(holeGame.clockTimer);
+
+      barrelGame.running = false;
+      clearInterval(barrelGame.peekTimer);
+      clearInterval(barrelGame.clockTimer);
+
+      clearTimeout(missingGame.previewTimeout);
+    }
+
+    /* ==========================================================================
+       ROSTER, MEMORY WALL, SOUND ROOM, ABOUT & DOSSIER
+       ========================================================================== */
+    function renderMembersRoster() {
+      const grid = document.getElementById("roster-grid");
+      grid.innerHTML = "";
+      COMMITTEE_CONFIG.members.forEach((m, i) => {
+        const card = document.createElement("article");
+        card.className = "roster-card";
+
+        const top = document.createElement("div");
+        top.className = "roster-top";
+        const av = document.createElement("div");
+        av.className = "roster-avatar";
+        av.appendChild(createAvatarVisual(m));
+
+        const info = document.createElement("div");
+        info.innerHTML = `<div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--amber-sulfur);">UNIT 0${i + 1}</div><h3>${m.name}</h3>`;
+        top.appendChild(av);
+        top.appendChild(info);
+
+        const q = document.createElement("div");
+        q.className = "roster-dialogue";
+        q.textContent = `"${m.dialogue}"`;
+
+        const actions = document.createElement("div");
+        actions.className = "roster-actions";
+
+        const playBtn = document.createElement("button");
+        playBtn.type = "button";
+        playBtn.textContent = "Speak";
+        playBtn.addEventListener("click", () => {
+          switchTab("scene-view");
+          triggerCharacter(m.id, { bypassCooldown: true });
+        });
+
+        const fightBtn = document.createElement("button");
+        fightBtn.type = "button";
+        fightBtn.textContent = "Fight";
+        fightBtn.addEventListener("click", () => startCharacterFight(m.id));
+
+        const dosBtn = document.createElement("button");
+        dosBtn.type = "button";
+        dosBtn.textContent = "ID";
+        dosBtn.addEventListener("click", () => openDossier(m.id));
+
+        actions.appendChild(playBtn);
+        actions.appendChild(fightBtn);
+        actions.appendChild(dosBtn);
+
+        card.appendChild(top);
+        card.appendChild(q);
+        card.appendChild(actions);
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSoundRoom() {
+      const grid = document.getElementById("soundboard-grid");
+      grid.innerHTML = "";
+      COMMITTEE_CONFIG.members.forEach((m, i) => {
+        const pad = document.createElement("button");
+        pad.type = "button";
+        pad.className = "sound-pad";
+        pad.innerHTML = `
+          <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--amber-sulfur);">CH 0${i + 1}</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:800;">${m.name}</div>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cream-muted);">"${m.dialogue}"</div>
+        `;
+        pad.addEventListener("click", () => {
+          document.querySelectorAll(".sound-pad.is-playing").forEach((el) => el.classList.remove("is-playing"));
+          pad.classList.add("is-playing");
+          audioManager.playMemberSound(m, () => pad.classList.remove("is-playing"));
+        });
+        grid.appendChild(pad);
+      });
+    }
+
+    function renderMemoryWall() {
+      const filterBar = document.getElementById("memory-filters");
+      const grid = document.getElementById("memory-grid");
+      const cats = ["ALL", ...new Set(COMMITTEE_CONFIG.memories.map((x) => x.category))];
+
+      filterBar.innerHTML = "";
+      cats.forEach((cat) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = `filter-chip ${state.memoryCategory === cat ? "active" : ""}`;
+        chip.textContent = cat;
+        chip.addEventListener("click", () => {
+          state.memoryCategory = cat;
+          renderMemoryWall();
+        });
+        filterBar.appendChild(chip);
+      });
+
+      grid.innerHTML = "";
+      const items = state.memoryCategory === "ALL"
+        ? COMMITTEE_CONFIG.memories
+        : COMMITTEE_CONFIG.memories.filter((x) => x.category === state.memoryCategory);
+
+      items.forEach((item) => {
+        const card = document.createElement("article");
+        card.className = "memory-card";
+
+        const media = document.createElement("div");
+        media.className = "memory-media";
+
+        if (item.mediaType === "image") {
+          const img = document.createElement("img");
+          img.src = item.mediaPath;
+          img.alt = item.title;
+          img.onerror = () => {
+            media.innerHTML = `<div class="memory-placeholder">MISSING FILE: ${item.mediaPath}</div>`;
+          };
+          media.appendChild(img);
+        } else if (item.mediaType === "video") {
+          const vid = document.createElement("video");
+          vid.src = item.mediaPath;
+          vid.controls = true;
+          media.appendChild(vid);
+        } else {
+          media.innerHTML = `<div class="memory-placeholder">PLACEHOLDER SLOT<br>${item.mediaPath}</div>`;
+        }
+
+        card.appendChild(media);
+        card.insertAdjacentHTML("beforeend", `
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.72rem;color:var(--amber-sulfur);">
+            <span>${item.category}</span>
+            <span>${item.date}</span>
+          </div>
+          <div style="font-weight:700;">${item.title}</div>
+          <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--cream-muted);">${item.caption}</div>
+        `);
+        grid.appendChild(card);
+      });
+    }
+
+    function renderAboutSection() {
+      const box = document.getElementById("about-content");
+      box.innerHTML = "";
+      COMMITTEE_CONFIG.about.paragraphs.forEach((pText) => {
+        const p = document.createElement("p");
+        p.style.fontFamily = "var(--font-mono)";
+        p.textContent = pText;
+        box.appendChild(p);
+      });
+      const note = document.createElement("div");
+      note.style.cssText = "background:var(--bg-panel);border-left:3px solid var(--amber-sulfur);padding:0.7rem 0.9rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--cream-muted);";
+      note.textContent = COMMITTEE_CONFIG.about.placeholderNotice;
+      box.appendChild(note);
+    }
+
+    function openDossier(memberId) {
+      const idx = COMMITTEE_CONFIG.members.findIndex((m) => m.id === memberId);
+      const m = COMMITTEE_CONFIG.members[idx];
+      if (!m) return;
+      state.activeModalMember = m;
+
+      document.getElementById("dossier-code").textContent = `FILE // 0${idx + 1}`;
+      document.getElementById("dossier-name").textContent = m.name;
+      document.getElementById("dossier-dialogue").textContent = `"${m.dialogue}"`;
+      document.getElementById("dossier-nickname").textContent = m.nickname;
+      document.getElementById("dossier-desc").textContent = m.description;
+      document.getElementById("dossier-personality").textContent = m.personality;
+      document.getElementById("dossier-ability").textContent = m.ability;
+
+      const slot = document.getElementById("dossier-avatar-slot");
+      slot.innerHTML = "";
+      slot.appendChild(createAvatarVisual(m));
+
+      const stats = document.getElementById("dossier-stats");
+      stats.innerHTML = "";
+      m.stats.forEach((st) => {
+        stats.insertAdjacentHTML("beforeend", `
+          <div class="stat-row">
+            <div class="stat-row-head"><span>${st.label}</span><span>${st.value}%</span></div>
+            <div class="stat-track"><div class="stat-fill" style="width:${st.value}%"></div></div>
+          </div>
+        `);
+      });
+
+      document.getElementById("dossier-backdrop").classList.add("open");
+    }
+
+    function closeDossier() {
+      document.getElementById("dossier-backdrop").classList.remove("open");
+      state.activeModalMember = null;
+    }
+
+    function switchTab(targetId) {
+      if (targetId !== "games-view") {
+        stopAllActiveGames();
+        collapseExpandedGame();
+      }
+      document.querySelectorAll(".nav-tab").forEach((t) => {
+        t.classList.toggle("active", t.dataset.target === targetId);
+      });
+      document.querySelectorAll(".view-section").forEach((sec) => {
+        sec.classList.toggle("active", sec.id === targetId);
+      });
+    }
+
+    function initPropsAndEasterEggs() {
+      const brand = document.getElementById("brand-title");
+      brand.addEventListener("click", () => {
+        state.titleClicks += 1;
+        if (state.titleClicks >= 5) {
+          state.titleClicks = 0;
+          document.body.classList.toggle("protocol-nine");
+          audioManager.playFunnySfx("sproing");
+          logActivity("SECRET TRIGGERED: PROTOCOL 09 INVERSION");
+        }
+      });
+
+      const bindProp = (id, fn) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("click", () => {
+          el.classList.add("prop-triggered");
+          setTimeout(() => el.classList.remove("prop-triggered"), 450);
+          fn();
+        });
+      };
+
+      bindProp("prop-lamp", () => {
+        document.body.classList.toggle("phosphor-mode");
+        audioManager.playFunnySfx("pop");
+        logActivity("LAMP CLICKED: PHOSPHOR MODE TOGGLED");
+      });
+
+      bindProp("prop-barrel", () => {
+        triggerCharacter("bipu", { bypassCooldown: true });
+      });
+
+      bindProp("prop-crate", () => {
+        triggerCharacter("sayzid", { bypassCooldown: true });
+      });
+
+      bindProp("prop-antenna", () => {
+        startCharacterFight();
+      });
+
+      bindProp("prop-moon", () => {
+        bumpChaos(12);
+        audioManager.playFunnySfx("boing");
+        triggerCharacter("ragib", { bypassCooldown: true });
+        logActivity("MOON CLICKED: Ragib stares into the night sky...");
+      });
+
+      bindProp("prop-door", () => {
+        bumpChaos(10);
+        audioManager.playFunnySfx("bonk");
+        triggerCharacter("nafi", { bypassCooldown: true });
+        logActivity("HQ DOOR BANGED: Nafi opens with a verdict!");
+      });
+
+      bindProp("prop-grass", () => {
+        bumpChaos(8);
+        audioManager.playFunnySfx("squeak");
+        triggerCharacter("anam", { bypassCooldown: true });
+        logActivity("WEEDS RUSTLED: Anam wheezes from the grass!");
+      });
+
+      bindProp("prop-clouds-1", () => {
+        audioManager.playFunnySfx("slideWhistle");
+        triggerCharacter("ali", { bypassCooldown: true });
+      });
+
+      bindProp("prop-clouds-2", () => {
+        audioManager.playFunnySfx("boing");
+        triggerCharacter("jahid", { bypassCooldown: true });
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        state.secretBuffer = (state.secretBuffer + e.key.toLowerCase()).slice(-6);
+        if (state.secretBuffer.endsWith("999")) {
+          state.secretBuffer = "";
+          triggerUnleashChaos();
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const gate = document.getElementById("entry-gate");
+      document.getElementById("enter-with-sound").addEventListener("click", () => {
+        audioManager.unlock(true);
+        gate.classList.add("hidden");
+      });
+      document.getElementById("enter-muted").addEventListener("click", () => {
+        audioManager.unlock(false);
+        gate.classList.add("hidden");
+      });
+
+      document.getElementById("toggle-mute-btn").addEventListener("click", () => audioManager.toggleMute());
+      document.getElementById("toggle-music-btn").addEventListener("click", () => audioManager.toggleMusic());
+      document.getElementById("volume-control").addEventListener("input", (e) => audioManager.setVolume(e.target.value));
+
+      document.querySelectorAll(".nav-tab").forEach((tab) => {
+        tab.addEventListener("click", () => switchTab(tab.dataset.target));
+      });
+
+      document.querySelectorAll("[data-exit-expand]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          audioManager.playFunnySfx("pop");
+          stopAllActiveGames();
+          collapseExpandedGame();
+          renderWheelLabels();
+        });
+      });
+
+      document.getElementById("btn-unleash-chaos").addEventListener("click", triggerUnleashChaos);
+      document.getElementById("btn-brawl-pair").addEventListener("click", () => startCharacterFight());
+      document.getElementById("btn-full-riot").addEventListener("click", startNinePersonRiot);
+      document.getElementById("btn-yeet-all").addEventListener("click", triggerYeetAll);
+      document.getElementById("btn-roast-mode").addEventListener("click", toggleRoastMode);
+      document.getElementById("btn-random-member").addEventListener("click", triggerRandomMember);
+
+      document.getElementById("rui-start-btn").addEventListener("click", startRuiGame);
+      document.getElementById("rui-replay-btn").addEventListener("click", startRuiGame);
+      document.getElementById("hole-start-btn").addEventListener("click", startHoleGame);
+      document.getElementById("hole-replay-btn").addEventListener("click", startHoleGame);
+      document.getElementById("barrel-start-btn").addEventListener("click", startBarrelGame);
+      document.getElementById("barrel-replay-btn").addEventListener("click", startBarrelGame);
+      document.getElementById("wheel-spin-btn").addEventListener("click", spinWorkWheel);
+      document.getElementById("missing-start-btn").addEventListener("click", startMissingMemberRound);
+
+      document.getElementById("sfx-airhorn-btn").addEventListener("click", () => {
+        audioManager.playFunnySfx("airhorn");
+        bumpChaos(10);
+      });
+      document.getElementById("sfx-boing-btn").addEventListener("click", () => {
+        audioManager.playFunnySfx("boing");
+        bumpChaos(6);
+      });
+      document.getElementById("sfx-bonk-btn").addEventListener("click", () => {
+        audioManager.playFunnySfx("bonk");
+        bumpChaos(6);
+      });
+      document.getElementById("sfx-wahwah-btn").addEventListener("click", () => {
+        audioManager.playFunnySfx("wahWah");
+        bumpChaos(4);
+      });
+      document.getElementById("sfx-riot-btn").addEventListener("click", startNinePersonRiot);
+
+      document.getElementById("dossier-close-btn").addEventListener("click", closeDossier);
+      document.getElementById("dossier-backdrop").addEventListener("click", (e) => {
+        if (e.target.id === "dossier-backdrop") closeDossier();
+      });
+      document.getElementById("dossier-sound-btn").addEventListener("click", () => {
+        if (state.activeModalMember) audioManager.playMemberSound(state.activeModalMember);
+      });
+      document.getElementById("dossier-fight-btn").addEventListener("click", () => {
+        if (state.activeModalMember) {
+          const id = state.activeModalMember.id;
+          closeDossier();
+          startCharacterFight(id);
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeDossier();
+      });
+
+      renderMainScene();
+      renderMembersRoster();
+      renderSoundRoom();
+      renderMemoryWall();
+      renderAboutSection();
+      buildFiveHoles();
+      buildBarrelStations();
+      renderWheelLabels();
+      initPropsAndEasterEggs();
+      startBlinkingLoop();
+      startAutonomousLife();
+    });
+  </script>
+</body>
+</html>
